@@ -12,3 +12,5 @@ Source files are added to the makefile at the appropriate place. Note that `SRC`
 The `shared/src/fault.cpp` file is included to handle oddities with embedded C++ and various linker errors caused by using C++ instead of C. This file must always be included in a build.
 
 To build an executable, run `make build` in the `specific_unit` folder for debug mode and `make build-release` for release mode.
+
+Linux users are recommended to use https://github.com/Enayaaa/md407 instead of Eterm8 to communicate with the MD407 board
