@@ -19,3 +19,5 @@ Users of other distributions may need to update program names in `.vscode/launch
     This should compile and start the program and break on entry into the main function
 
 To add additional source files, just add them to the `FILES` variable in `makefile`. Make sure all lines but the last one end with `\`.
+
+Users who prefer to use GDB directly in the terminal can copy in the .gdbinit file from the top level to automate loading and connecting to simserver
