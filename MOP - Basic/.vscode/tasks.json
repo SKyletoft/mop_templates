@@ -14,6 +14,13 @@
 			}
 		},
 		{
+			"label": "run_hardware_windows",
+			"type": "shell",
+			"command": "C:/cseapp/CodeLite/mingw32-make run_windows",
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
 			"label": "build_linux",
 			"type": "shell",
 			"command": "make build_linux",
