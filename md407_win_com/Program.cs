@@ -1,10 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.IO.Ports;
 
 class Program {
 	public static void Main(string[] args) {
 		if (args.Length == 0) {
-			System.Console.Error.WriteLine("No command specified, doing nothing");
+			Console.Error.WriteLine("No command specified, doing nothing");
 			return;
 		}
 		var port = get_and_init_port();
@@ -15,7 +16,7 @@ class Program {
 				break;
 			case "load":
 				if (args.Length != 2) {
-					System.Console.Error.WriteLine("No or too many files supplied, doing nothing");
+					Console.Error.WriteLine("No or too many files supplied, doing nothing");
 					break;
 				}
 				load(port, args[1]);
@@ -56,7 +57,7 @@ class Program {
 
 	static void load(SerialPort port, string file_name) {
 		port.WriteLine("load");
-		var file = System.IO.File.ReadAllLines(file_name);
+		var file = File.ReadAllLines(file_name);
 		foreach (var line in file) {
 			port.WriteLine(line);
 		}
