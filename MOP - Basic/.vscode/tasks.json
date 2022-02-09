@@ -6,12 +6,18 @@
 		{
 			"label": "build_windows",
 			"type": "shell",
-			"command": "C:/cseapp/CodeLite/mingw32-make build_windows"
+			"command": "C:/cseapp/CodeLite/mingw32-make build_windows",
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
 		},
 		{
 			"label": "build_linux",
 			"type": "shell",
-			"command": "make build_linux"
+			"command": "make build_linux",
+			"group": "build"
 		}
 	]
 }
