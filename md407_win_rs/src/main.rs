@@ -1,26 +1,34 @@
-use std::{io::Read, os::raw::c_int as int, time::Duration};
+use std::{os::raw::c_int as int, time::Duration};
+use clap::Parser;
 
 use serialport::SerialPort;
 
+#[derive(Parser, Debug, PartialEq)]
+#[clap(author, about)]
+struct Args {
+
+	/// Usually /dev/ttyUSB0 on linux and COM3 on Windows
+	#[clap(short, long)]
+	port: String,
+
+	/// Usually 115200, but some cards use 124400
+	#[clap(short, long, default_value_t = 115_200)]
+	baud_rate: u32,
+}
+
 fn main() {
-	let ports = serialport::available_ports().expect("No ports found!");
-	dbg!(&ports);
+	let args = Args::parse();
 
-	#[cfg(windows)]
-	let port_name = "COM3";
-	#[cfg(not(windows))]
-	let port_name = "/dev/ttyUSB0";
-
-	let mut port = serialport::new(port_name, 115_200)
+	let mut port = serialport::new(&args.port, args.baud_rate)
 		.open_native()
 		.expect("Failed to open port");
-	port.set_timeout(Duration::from_millis(5000))
+	port.set_timeout(Duration::from_millis(50))
 		.expect("Couldn't set timeout");
 
 	let mut reader = port.try_clone().expect("Error creating reader");
 	let mut writer = port;
 
-	let reader_thread = std::thread::spawn(move || read_from_device(reader.as_mut()));
+	let _reader_thread = std::thread::spawn(move || read_from_device(reader.as_mut()));
 	write_to_device(&mut writer);
 }
 
