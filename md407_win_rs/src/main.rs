@@ -33,9 +33,6 @@ struct Args {
 
 fn main() {
 	let args = Args::parse();
-	let stdout = std::io::stdout();
-	let mut stdout = stdout.lock();
-	let mut small_buffer = b'\0';
 
 	let mut port = serialport::new(&args.port, args.baud_rate)
 		.open()
@@ -45,6 +42,20 @@ fn main() {
 
 	terminal::enable_raw_mode().expect("Couldn't enter raw mode");
 
+	match args.mode {
+		Mode::Load => todo!(),
+		Mode::Go => todo!(),
+		Mode::Interactive => interactive_mode(port),
+	}
+
+	terminal::disable_raw_mode().expect("Couldn't exit raw mode");
+	println!();
+}
+
+fn interactive_mode(mut port: Box<dyn SerialPort>) {
+	let stdout = std::io::stdout();
+	let mut stdout = stdout.lock();
+	let mut small_buffer = b'\0';
 	loop {
 		// Check for input from user
 		if event::poll(Duration::from_millis(1)).expect("input error") {
@@ -79,14 +90,9 @@ fn main() {
 				.expect("Error writing to stdout");
 			// libc::putchar(small_buffer as int);
 			if small_buffer == b'\n' {
-				stdout
-					.write(b"\r")
-					.expect("Error writing to stdout");
+				stdout.write(b"\r").expect("Error writing to stdout");
 			}
 			stdout.flush().expect("Error flushing stdout");
 		}
 	}
-
-	terminal::disable_raw_mode().expect("Couldn't exit raw mode");
-	println!();
 }
