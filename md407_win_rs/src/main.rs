@@ -1,4 +1,4 @@
-use std::{os::raw::c_int as int, time::Duration};
+use std::{os::raw::c_int as int, time::Duration, slice};
 
 use clap::Parser;
 use serialport::SerialPort;
@@ -44,14 +44,16 @@ fn main() {
 }
 
 fn read_from_device(port: &mut dyn SerialPort) -> ! {
+	let mut small_buffer = b'\0';
 	loop {
-		let mut small_buffer = [b'\0'];
+		// Wait for input
 		while let Ok(0) = port.bytes_to_read() {}
-		let _ = port.read(&mut small_buffer).expect("Read error");
+
+		let _ = port.read(slice::from_mut(&mut small_buffer)).expect("Read error");
 
 		// Safety: None, and that's the point. I'm purposefully avoioding locking stdin and stdout
 		unsafe {
-			libc::putchar(small_buffer[0] as int);
+			libc::putchar(small_buffer as int);
 		}
 	}
 }
@@ -60,7 +62,7 @@ fn write_to_device(port: &mut dyn SerialPort) -> ! {
 	loop {
 		// Safety: None, and that's the point. I'm purposefully avoioding locking stdin and stdout
 		let mut c = unsafe { libc::getchar() } as u8;
-		port.write(std::slice::from_mut(&mut c))
+		port.write(slice::from_mut(&mut c))
 			.expect("Write error");
 	}
 }
