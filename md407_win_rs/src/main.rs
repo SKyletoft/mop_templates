@@ -1,58 +1,101 @@
-use std::{io::Write, os::raw::c_int as int, slice, thread, time::Duration};
+use std::{io::Write, slice, time::Duration};
 
-use clap::Parser;
+use clap::{Parser, Subcommand};
 use crossterm::{
 	event::{self, Event, KeyCode, KeyEvent, KeyModifiers},
-	terminal, ExecutableCommand,
+	terminal,
 };
 use serialport::SerialPort;
 
-mod error;
-
-#[derive(Debug, PartialEq, Copy, Clone)]
+#[derive(Subcommand, Debug, PartialEq, Clone)]
 enum Mode {
-	Load,
-	Go,
-	Interactive,
+	/// Load a .s19 file to the device
+	Load {
+		/// Usually /dev/ttyUSB0 on Linux and COM3 on Windows
+		#[clap(short, long)]
+		port: String,
+
+		/// Usually 115200, but some cards use 124400
+		#[clap(short, long, default_value_t = 115_200)]
+		baud_rate: u32,
+
+		#[clap(short, long)]
+		filename: String,
+	},
+	/// Start the loaded program
+	Go {
+		/// Usually /dev/ttyUSB0 on Linux and COM3 on Windows
+		#[clap(short, long)]
+		port: String,
+
+		/// Usually 115200, but some cards use 124400
+		#[clap(short, long, default_value_t = 115_200)]
+		baud_rate: u32,
+	},
+	/// Start an interactive terminal
+	Interactive {
+		/// Usually /dev/ttyUSB0 on Linux and COM3 on Windows
+		#[clap(short, long)]
+		port: String,
+
+		/// Usually 115200, but some cards use 124400
+		#[clap(short, long, default_value_t = 115_200)]
+		baud_rate: u32,
+	},
+	/// Query the OS for connected Serial Devices
+	Query,
 }
 
 #[derive(Parser, Debug, PartialEq, Clone)]
 #[clap(author, about)]
 struct Args {
-	/// Usually /dev/ttyUSB0 on Linux and COM3 on Windows
-	#[clap(short, long)]
-	port: String,
-
-	/// Usually 115200, but some cards use 124400
-	#[clap(short, long, default_value_t = 115_200)]
-	baud_rate: u32,
-
-	#[clap(short, long, default_value_t = Mode::Interactive)]
+	#[clap(subcommand)]
 	mode: Mode,
 }
 
 fn main() {
 	let args = Args::parse();
 
-	let mut port = serialport::new(&args.port, args.baud_rate)
-		.open()
+	match args.mode {
+		Mode::Load {
+			port,
+			baud_rate,
+			filename,
+		} => load_mode(connect(&port, baud_rate), &filename),
+		Mode::Go { port, baud_rate } => go_mode(connect(&port, baud_rate)),
+		Mode::Interactive { port, baud_rate } => interactive_mode(connect(&port, baud_rate)),
+		Mode::Query => query_mode(),
+	}
+}
+
+fn connect(name: &str, baud_rate: u32) -> impl SerialPort {
+	let mut port = serialport::new(name, baud_rate)
+		.open_native()
 		.expect("Failed to open port");
 	port.set_timeout(Duration::from_millis(50))
 		.expect("Couldn't set timeout");
-
-	terminal::enable_raw_mode().expect("Couldn't enter raw mode");
-
-	match args.mode {
-		Mode::Load => todo!(),
-		Mode::Go => todo!(),
-		Mode::Interactive => interactive_mode(port),
-	}
-
-	terminal::disable_raw_mode().expect("Couldn't exit raw mode");
-	println!();
+	port
 }
 
-fn interactive_mode(mut port: Box<dyn SerialPort>) {
+fn query_mode() {
+	let ports = serialport::available_ports().expect("Failed to query ports");
+	for port in ports.iter() {
+		println!("{}", port.port_name);
+	}
+}
+
+fn load_mode(mut port: impl SerialPort, filename: &str) {
+	let file = std::fs::read(filename).expect("Could not read file. Does it exist?");
+	port.write_all(b"load\n").expect("Write error");
+	port.write_all(&file).expect("Write error");
+}
+
+fn go_mode(mut port: impl SerialPort) {
+	port.write_all(b"go\n").expect("Write error");
+}
+
+fn interactive_mode(mut port: impl SerialPort) {
+	terminal::enable_raw_mode().expect("Couldn't enter raw mode");
 	let stdout = std::io::stdout();
 	let mut stdout = stdout.lock();
 	let mut small_buffer = b'\0';
@@ -71,7 +114,7 @@ fn interactive_mode(mut port: Box<dyn SerialPort>) {
 						KeyCode::Backspace => 0x08,
 						_ => continue,
 					};
-					port.write(slice::from_mut(&mut byte_rep))
+					port.write_all(slice::from_mut(&mut byte_rep))
 						.expect("Write error");
 				}
 				_ => {}
@@ -79,20 +122,24 @@ fn interactive_mode(mut port: Box<dyn SerialPort>) {
 		}
 
 		// Check for input from device
-		if let Ok(0) = port.bytes_to_read() {
-		} else {
+		if matches!(port.bytes_to_read(), Ok(n) if n != 0) {
+			// We only read a single byte at a time because the hardware times
+			// out otherwise
 			let _ = port
 				.read(slice::from_mut(&mut small_buffer))
 				.expect("Read error");
 
 			stdout
-				.write(slice::from_ref(&small_buffer))
+				.write_all(slice::from_ref(&small_buffer))
 				.expect("Error writing to stdout");
-			// libc::putchar(small_buffer as int);
+
+			// Because we're in raw mode
 			if small_buffer == b'\n' {
-				stdout.write(b"\r").expect("Error writing to stdout");
+				stdout.write_all(b"\r").expect("Error writing to stdout");
 			}
 			stdout.flush().expect("Error flushing stdout");
 		}
 	}
+	terminal::disable_raw_mode().expect("Couldn't exit raw mode");
+	println!();
 }

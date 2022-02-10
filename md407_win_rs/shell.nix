@@ -1,10 +1,10 @@
 { pkgs ? import <nixpkgs> {} }:
 pkgs.mkShell rec {
 	buildInputs = with pkgs; [
-		pkg-config
 		libudev
 	];
 	nativeBuildInputs = with pkgs; [
+		pkg-config
 		rustup
 	];
 	shellHook = ''
