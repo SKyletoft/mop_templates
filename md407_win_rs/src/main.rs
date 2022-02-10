@@ -1,13 +1,14 @@
 use std::{io::Write, slice, time::Duration};
 
-use clap::{Parser, Subcommand};
+use clap::Parser;
 use crossterm::{
 	event::{self, Event, KeyCode, KeyEvent, KeyModifiers},
 	terminal,
 };
 use serialport::SerialPort;
 
-#[derive(Subcommand, Debug, PartialEq, Clone)]
+#[derive(Parser, Debug, PartialEq, Clone)]
+#[clap(author, about)]
 enum Mode {
 	/// Load a .s19 file to the device
 	Load {
@@ -46,17 +47,10 @@ enum Mode {
 	Query,
 }
 
-#[derive(Parser, Debug, PartialEq, Clone)]
-#[clap(author, about)]
-struct Args {
-	#[clap(subcommand)]
-	mode: Mode,
-}
-
 fn main() {
-	let args = Args::parse();
+	let args = Mode::parse();
 
-	match args.mode {
+	match args {
 		Mode::Load {
 			port,
 			baud_rate,
