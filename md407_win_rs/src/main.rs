@@ -1,12 +1,50 @@
-use std::{os::raw::c_int as int, time::Duration};
-use clap::Parser;
+use std::{fmt::Display, os::raw::c_int as int, str::FromStr, time::Duration};
 
+use clap::Parser;
 use serialport::SerialPort;
 
-#[derive(Parser, Debug, PartialEq)]
+#[derive(Debug, PartialEq, Copy, Clone)]
+enum Mode {
+	Load,
+	Go,
+	Interactive,
+}
+
+impl FromStr for Mode {
+	type Err = Error;
+
+	fn from_str(s: &str) -> Result<Self, Self::Err> {
+		let lowercase = s.to_lowercase();
+		let res = match lowercase.as_str() {
+			"load" => Mode::Load,
+			"go" => Mode::Go,
+			"interactive" => Mode::Interactive,
+			_ => return Err(Error),
+		};
+		Ok(res)
+	}
+}
+
+impl Display for Mode {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		write!(f, "{self:?}")
+	}
+}
+
+#[derive(Debug, Copy, Clone, PartialEq)]
+struct Error;
+
+impl Display for Error {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		write!(f, "Error")
+	}
+}
+
+impl std::error::Error for Error {}
+
+#[derive(Parser, Debug, PartialEq, Clone)]
 #[clap(author, about)]
 struct Args {
-
 	/// Usually /dev/ttyUSB0 on linux and COM3 on Windows
 	#[clap(short, long)]
 	port: String,
@@ -14,6 +52,9 @@ struct Args {
 	/// Usually 115200, but some cards use 124400
 	#[clap(short, long, default_value_t = 115_200)]
 	baud_rate: u32,
+
+	#[clap(short, long, default_value_t = Mode::Interactive)]
+	mode: Mode,
 }
 
 fn main() {
