@@ -1,4 +1,4 @@
-use std::{str::FromStr, fmt::Display};
+use std::{fmt::Display, str::FromStr};
 
 use crate::Mode;
 
@@ -33,4 +33,3 @@ impl Display for Error {
 }
 
 impl std::error::Error for Error {}
-

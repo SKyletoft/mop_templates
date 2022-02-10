@@ -1,6 +1,10 @@
-use std::{os::raw::c_int as int, time::Duration, slice};
+use std::{io::Write, os::raw::c_int as int, slice, thread, time::Duration};
 
 use clap::Parser;
+use crossterm::{
+	event::{self, Event, KeyCode, KeyEvent, KeyModifiers},
+	terminal, ExecutableCommand,
+};
 use serialport::SerialPort;
 
 mod error;
@@ -15,7 +19,7 @@ enum Mode {
 #[derive(Parser, Debug, PartialEq, Clone)]
 #[clap(author, about)]
 struct Args {
-	/// Usually /dev/ttyUSB0 on linux and COM3 on Windows
+	/// Usually /dev/ttyUSB0 on Linux and COM3 on Windows
 	#[clap(short, long)]
 	port: String,
 
@@ -29,40 +33,60 @@ struct Args {
 
 fn main() {
 	let args = Args::parse();
+	let stdout = std::io::stdout();
+	let mut stdout = stdout.lock();
+	let mut small_buffer = b'\0';
 
 	let mut port = serialport::new(&args.port, args.baud_rate)
-		.open_native()
+		.open()
 		.expect("Failed to open port");
 	port.set_timeout(Duration::from_millis(50))
 		.expect("Couldn't set timeout");
 
-	let mut reader = port.try_clone().expect("Error creating reader");
-	let mut writer = port;
+	terminal::enable_raw_mode().expect("Couldn't enter raw mode");
 
-	let _reader_thread = std::thread::spawn(move || read_from_device(reader.as_mut()));
-	write_to_device(&mut writer);
-}
-
-fn read_from_device(port: &mut dyn SerialPort) -> ! {
-	let mut small_buffer = b'\0';
 	loop {
-		// Wait for input
-		while let Ok(0) = port.bytes_to_read() {}
+		// Check for input from user
+		if event::poll(Duration::from_millis(1)).expect("input error") {
+			match event::read().expect("input error") {
+				Event::Key(KeyEvent {
+					code: KeyCode::Char('c'),
+					modifiers: KeyModifiers::CONTROL,
+				}) => break,
+				Event::Key(KeyEvent { code, .. }) => {
+					let mut byte_rep = match code {
+						KeyCode::Char(c) => c as u8,
+						KeyCode::Enter => 0x0D,
+						KeyCode::Backspace => 0x08,
+						_ => continue,
+					};
+					port.write(slice::from_mut(&mut byte_rep))
+						.expect("Write error");
+				}
+				_ => {}
+			}
+		}
 
-		let _ = port.read(slice::from_mut(&mut small_buffer)).expect("Read error");
+		// Check for input from device
+		if let Ok(0) = port.bytes_to_read() {
+		} else {
+			let _ = port
+				.read(slice::from_mut(&mut small_buffer))
+				.expect("Read error");
 
-		// Safety: None, and that's the point. I'm purposefully avoioding locking stdin and stdout
-		unsafe {
-			libc::putchar(small_buffer as int);
+			stdout
+				.write(slice::from_ref(&small_buffer))
+				.expect("Error writing to stdout");
+			// libc::putchar(small_buffer as int);
+			if small_buffer == b'\n' {
+				stdout
+					.write(b"\r")
+					.expect("Error writing to stdout");
+			}
+			stdout.flush().expect("Error flushing stdout");
 		}
 	}
-}
 
-fn write_to_device(port: &mut dyn SerialPort) -> ! {
-	loop {
-		// Safety: None, and that's the point. I'm purposefully avoioding locking stdin and stdout
-		let mut c = unsafe { libc::getchar() } as u8;
-		port.write(slice::from_mut(&mut c))
-			.expect("Write error");
-	}
+	terminal::disable_raw_mode().expect("Couldn't exit raw mode");
+	println!();
 }
