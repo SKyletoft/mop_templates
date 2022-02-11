@@ -1,12 +1,22 @@
 # Yes, these are hacky and don't allow anything to be cached. I'm not gonna do the research to figure that one out for programs of this scale.
 # Merge requests welcome though
 
-# Windows path
-GCCPATH := C:/cseapp/CodeLite/tools/gcc-arm/bin
-RUN     := ".\.vscode\windows_hardware_deps\net6.0\win-x86\MOP - Basic.exe"
 FILES := \
 	main.c \
 	startup.c
+
+WINDOWS_PORT := COM3
+LINUX_PORT := /dev/ttyUSB0
+
+#                       +---------------------------------------------------------------------------+
+#                       |                                                                           |
+#                       | If you're just using the templates, there's nothing to look at below this |
+#                       |                                                                           |
+#                       +---------------------------------------------------------------------------+
+
+GCCPATH := C:/cseapp/CodeLite/tools/gcc-arm/bin
+RUN_W   := "./.vscode/hardware-com-windows.exe"
+RUN_L   := "./.vscode/hardware-com-linux"
 
 build_windows:
 	-mkdir debug
@@ -26,5 +36,10 @@ build_linux:
 
 run_windows:
 	C:/cseapp/CodeLite/mingw32-make build_windows
-	$(RUN) load ./debug/MOP.s19
-	$(RUN) go
+	$(RUN_W) load -p $(WINDOWS_PORT) -f debug/MOP.s19
+	$(RUN_W) interactive -p $(WINDOWS_PORT)
+
+run_linux:
+	make build_linux
+	$(RUN_L) load -p $(LINUX_PORT) -f debug/MOP.s19
+	$(RUN_L) interactive -p $(LINUX_PORT)
