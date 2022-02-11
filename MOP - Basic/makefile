@@ -43,3 +43,9 @@ run_linux:
 	make build_linux
 	$(RUN_L) load -p $(LINUX_PORT) -f debug/MOP.s19
 	$(RUN_L) interactive -p $(LINUX_PORT)
+
+query_windows:
+	$(RUN_W) query
+
+query_linux:
+	$(RUN_L) query

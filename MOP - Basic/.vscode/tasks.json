@@ -31,5 +31,17 @@
 			"problemMatcher": [],
 			"group": "build"
 		},
+		{
+			"label": "query_linux",
+			"type": "shell",
+			"command": "make query_linux",
+			"problemMatcher": []
+		},
+		{
+			"label": "query_windows",
+			"type": "shell",
+			"command": "C:/cseapp/CodeLite/mingw32-make query_windows",
+			"problemMatcher": []
+		},
 	]
 }
