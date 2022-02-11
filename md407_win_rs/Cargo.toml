@@ -14,3 +14,4 @@ panic = "abort"
 serialport = "4.0.1"
 clap = { version = "3.0.14", features = [ "derive" ] }
 crossterm = "0.23.0"
+anyhow = "1.0.53"
