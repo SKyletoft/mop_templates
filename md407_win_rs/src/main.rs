@@ -98,7 +98,7 @@ fn interactive_mode(mut port: impl SerialPort) {
 		if event::poll(Duration::from_millis(1)).expect("input error") {
 			match event::read().expect("input error") {
 				Event::Key(KeyEvent {
-					code: KeyCode::Char('c'),
+					code: KeyCode::Char('c' | 'C'),
 					modifiers: KeyModifiers::CONTROL,
 				}) => break,
 				Event::Key(KeyEvent { code, .. }) => {
