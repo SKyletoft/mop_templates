@@ -82,6 +82,8 @@ fn load_mode(mut port: impl SerialPort, filename: &str) {
 	let file = std::fs::read(filename).expect("Could not read file. Does it exist?");
 	port.write_all(b"load\n").expect("Write error");
 	port.write_all(&file).expect("Write error");
+
+	#[cfg(windows)]
 	port.write_all(b"\n").expect("Write error");
 }
 
