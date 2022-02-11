@@ -1,10 +1,9 @@
-# Yes, these are hacky and don't allow anything to be cached. I'm not gonna do the research to figure that one out for programs of this scale.
-# Merge requests welcome though
-
+# Add files here and remember the backslash on all but the last line
 FILES := \
 	main.c \
 	startup.c
 
+# Copy the value from query_* to here. If there are several, you might have to try them all
 WINDOWS_PORT := COM3
 LINUX_PORT := /dev/ttyUSB0
 
@@ -13,6 +12,9 @@ LINUX_PORT := /dev/ttyUSB0
 #                       | If you're just using the templates, there's nothing to look at below this |
 #                       |                                                                           |
 #                       +---------------------------------------------------------------------------+
+
+# Yes, these are hacky and don't allow anything to be cached. I'm not gonna do the research to figure that one out for programs of this scale.
+# Merge requests welcome though
 
 GCCPATH := C:/cseapp/CodeLite/tools/gcc-arm/bin
 RUN_W   := "./.vscode/hardware-com-windows.exe"
