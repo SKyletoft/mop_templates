@@ -30,6 +30,7 @@ Hardware instructions
 6. Select `run_hardware_linux`/`windows`
     This should compile and start the program on the md407. Type `go` to start your program or `dbg` to use the hardware debugging capabilities
 
+The Task Runner extension exists if you want to move the tasks into the explorer instead of using Ctrl + Shift + P
 
 To add additional source files, just add them to the `FILES` variable in `makefile`. Make sure all lines but the last one end with `\`.
 
