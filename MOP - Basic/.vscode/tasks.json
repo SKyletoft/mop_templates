@@ -1,6 +1,4 @@
 {
-	// See https://go.microsoft.com/fwlink/?LinkId=733558
-	// for the documentation about the tasks.json format
 	"version": "2.0.0",
 	"tasks": [
 		{
@@ -25,6 +23,13 @@
 			"type": "shell",
 			"command": "make build_linux",
 			"group": "build"
-		}
+		},
+		{
+			"label": "run_hardware_linux",
+			"type": "shell",
+			"command": "make run_linux",
+			"problemMatcher": [],
+			"group": "build"
+		},
 	]
 }
