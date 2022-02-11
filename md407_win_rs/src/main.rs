@@ -82,6 +82,7 @@ fn load_mode(mut port: impl SerialPort, filename: &str) {
 	let file = std::fs::read(filename).expect("Could not read file. Does it exist?");
 	port.write_all(b"load\n").expect("Write error");
 	port.write_all(&file).expect("Write error");
+	port.write_all(b"\n").expect("Write error");
 }
 
 fn go_mode(mut port: impl SerialPort) {
@@ -93,11 +94,16 @@ fn interactive_mode(mut port: impl SerialPort) {
 	let stdout = std::io::stdout();
 	let mut stdout = stdout.lock();
 	let mut small_buffer = b'\0';
+
+	port.write_all(b"\n").expect("Write error");
+	port.flush().expect("Write error");
+
 	loop {
 		// Check for input from user
 		if event::poll(Duration::from_millis(1)).expect("input error") {
 			match event::read().expect("input error") {
 				Event::Key(KeyEvent {
+					// Lower case on Linux, upper case on Windows
 					code: KeyCode::Char('c' | 'C'),
 					modifiers: KeyModifiers::CONTROL,
 				}) => break,
@@ -123,6 +129,11 @@ fn interactive_mode(mut port: impl SerialPort) {
 				.read(slice::from_mut(&mut small_buffer))
 				.expect("Read error");
 
+			// Windows can't handle printing 0xFF
+			if small_buffer == u8::MAX {
+				continue;
+			}
+
 			stdout
 				.write_all(slice::from_ref(&small_buffer))
 				.expect("Error writing to stdout");
@@ -135,5 +146,5 @@ fn interactive_mode(mut port: impl SerialPort) {
 		}
 	}
 	terminal::disable_raw_mode().expect("Couldn't exit raw mode");
-	println!();
+	writeln!(stdout).expect("Error writing to stdout");
 }
