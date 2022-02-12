@@ -14,6 +14,7 @@ export class PortConfig implements vscode.TreeDataProvider<TreeItem> {
 		const query = execFileSync('git/mop_templates/vsc_gui/native_dependencies/hardware-com-linux', ['query'])
 			.toString('utf8')
 			.split('\n')
+			.filter((line: string) => line.length !== 0)
 			.map((line: string) => new vscode.TreeItem(line, vscode.TreeItemCollapsibleState.None));
 		return Promise.resolve(query);
 	}
