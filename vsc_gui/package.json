@@ -26,6 +26,18 @@
 			{
 				"command": "md407.run",
 				"title": "Do"
+			},
+			{
+				"command": "md407.new_basic",
+				"title": "Create new project from the Basic template"
+			},
+			{
+				"command": "md407.new_crt",
+				"title": "Create new project from the CRT template"
+			},
+			{
+				"command": "md407.new_project",
+				"title": "Create new project from the Datatekniskt Projekt template"
 			}
 		],
 		"viewsContainers": {
