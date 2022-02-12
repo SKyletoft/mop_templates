@@ -64,9 +64,10 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage("Baud rate set to " + baud_rate);
 	});
 
+	let ports = new PortConfig();
 	vscode.window.createTreeView(
 		'md407-ports', {
-		treeDataProvider: new PortConfig()
+		treeDataProvider: ports
 	});
 
 	vscode.window.createTreeView(
@@ -79,6 +80,10 @@ export function activate(context: vscode.ExtensionContext) {
 		'md407-actions', {
 		treeDataProvider: new Actions(),
 		canSelectMany: false,
+	});
+
+	vscode.commands.registerCommand('md407.reload_ports', (entry) => {
+		ports.refresh();
 	});
 }
 

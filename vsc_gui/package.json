@@ -17,6 +17,14 @@
 	"contributes": {
 		"commands": [
 			{
+				"command": "md407.reload_ports",
+				"title": "Reload ports",
+				"icon": {
+					"light": "media/light_refresh.svg",
+					"dark": "media/dark_refresh.svg"
+				}
+			},
+			{
 				"command": "md407.set_port",
 				"title": "Set port"
 			},
@@ -67,6 +75,13 @@
 			]
 		},
 		"menus": {
+			"view/title": [
+				{
+					"command": "md407.reload_ports",
+					"when": "view == md407-ports",
+					"group": "navigation"
+				}
+			],
 			"view/item/context": [
 				{
 					"command": "md407.run",

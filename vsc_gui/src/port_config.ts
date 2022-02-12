@@ -20,4 +20,11 @@ export class PortConfig implements vscode.TreeDataProvider<TreeItem> {
 			.map((line: string) => new vscode.TreeItem(line, vscode.TreeItemCollapsibleState.None));
 		return Promise.resolve(query);
 	}
+
+	private _onDidChangeTreeData: vscode.EventEmitter<TreeItem | undefined | null | void> = new vscode.EventEmitter<TreeItem | undefined | null | void>();
+	readonly onDidChangeTreeData: vscode.Event<TreeItem | undefined | null | void> = this._onDidChangeTreeData.event;
+
+	refresh(): void {
+		this._onDidChangeTreeData.fire();
+	}
 }
