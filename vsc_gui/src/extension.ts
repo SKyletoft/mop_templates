@@ -11,29 +11,21 @@ let baud_rate = "";
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	let path = vscode.workspace.workspaceFolders || [];
 	vscode.window.createTreeView(
 		'md407-ports', {
 		treeDataProvider: new PortConfig()
-	}).onDidChangeSelection((e) => {
-		port = (e.selection[0].label || "").toString();
 	});
+
 	vscode.window.createTreeView(
 		'md407-rates', {
 		treeDataProvider: new BaudRateConfig(),
 		canSelectMany: false,
-	}).onDidChangeSelection((e) => {
-		baud_rate = (e.selection[0].label || "").toString();
 	});
 
-	const actions = vscode.window.createTreeView(
+	vscode.window.createTreeView(
 		'md407-actions', {
 		treeDataProvider: new Actions(),
 		canSelectMany: false,
-	});
-	actions.onDidChangeSelection((e) => {
-		let action = (e.selection[0].label || "").toString();
-		console.log(action, port, baud_rate);
 	});
 }
 
