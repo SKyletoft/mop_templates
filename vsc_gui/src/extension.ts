@@ -32,9 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
 					vscode.window.showErrorMessage("You have to set a port");
 					break;
 				}
-				const out = md407_win_rs.load(port, get_baud_rate());
-				vscode.window.showInformationMessage("Load complete");
-				console.log(out);
+				md407_win_rs.load(port, get_baud_rate());
 			} break;
 			case "Go": {
 				if (port === "") {

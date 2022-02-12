@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 
 const { execSync, execFileSync } = require('child_process');
+const fs = require('fs');
 
 export class MD407WinRsWrapper {
 	path: string;
@@ -15,10 +16,22 @@ export class MD407WinRsWrapper {
 		return execFileSync(this.path, ['query']).toString('utf8');
 	}
 
-	load(port: string, baud_rate: number): string {
-		const workspace_path = vscode.workspace.workspaceFolders || ["~"];
-		const out_path = workspace_path[0] + "/debug/MOP.s19";
-		return execFileSync(this.path, ['load', '--filename', out_path, '--port', port, '--baud-rate', baud_rate.toString()]).toString('utf8');
+	load(port: string, baud_rate: number) {
+		const workspace_folder = vscode.workspace.workspaceFolders?.map((folder) => folder.uri.path)[0] || "~";
+		const out_path = workspace_folder + "/" + "debug/MOP.s19";
+		const exists = fs.existsSync(out_path);
+
+		if (!exists) {
+			vscode.window.showErrorMessage("No file to send. Have you compiled?");
+		}
+
+		const out = execFileSync(
+			this.path,
+			['load', '--filename', out_path, '--port', port, '--baud-rate', baud_rate.toString()],
+			{ timeout: 60000 } // One minute
+		).toString('utf8');
+		console.log(out);
+		vscode.window.showInformationMessage("Load complete");
 	}
 
 	go(port: string, baud_rate: number): string {
