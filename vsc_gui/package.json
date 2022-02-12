@@ -14,7 +14,20 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [],
+		"commands": [
+			{
+				"command": "md407.set_port",
+				"title": "Set port"
+			},
+			{
+				"command": "md407.set_rate",
+				"title": "Set baud rate"
+			},
+			{
+				"command": "md407.run",
+				"title": "Do"
+			}
+		],
 		"viewsContainers": {
 			"activitybar": [
 				{
@@ -37,6 +50,25 @@
 				{
 					"id": "md407-rates",
 					"name": "Baud Rate Config"
+				}
+			]
+		},
+		"menus": {
+			"view/item/context": [
+				{
+					"command": "md407.run",
+					"when": "view == md407-actions",
+					"group": "inline"
+				},
+				{
+					"command": "md407.set_port",
+					"when": "view == md407-ports",
+					"group": "inline"
+				},
+				{
+					"command": "md407.set_rate",
+					"when": "view == md407-rates",
+					"group": "inline"
 				}
 			]
 		}
