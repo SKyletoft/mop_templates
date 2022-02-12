@@ -1,7 +1,8 @@
 # Add files here and remember the backslash on all but the last line
 FILES := \
 	main.c \
-	startup.c
+	startup.c \
+	debug.c
 
 # Copy the value from query_* to here. If there are several, you might have to try them all
 WINDOWS_PORT := COM3

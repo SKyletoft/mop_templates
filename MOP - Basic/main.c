@@ -1,6 +1,7 @@
 /// main.c
 
 #include "startup.h"
+#include "debug.h"
 
 void main(void) {
 	long long x = 15;
@@ -11,4 +12,6 @@ void main(void) {
 	} else {
 		y = 1;
 	}
+
+	print("\nHello world\n");
 }
