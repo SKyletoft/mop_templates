@@ -2,45 +2,41 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "build_windows",
+			"label": "build",
 			"type": "shell",
-			"command": "C:/cseapp/CodeLite/mingw32-make build_windows",
 			"problemMatcher": [],
 			"group": {
 				"kind": "build",
 				"isDefault": true
+			},
+			"linux": {
+				"command": "make build_linux"
+			},
+			"windows": {
+				"command": "C:/cseapp/CodeLite/mingw32-make build_windows"
 			}
 		},
 		{
-			"label": "run_hardware_windows",
+			"label": "run_hardware",
 			"type": "shell",
-			"command": "C:/cseapp/CodeLite/mingw32-make run_windows",
+			"linux": {
+				"command": "make run_linux"
+			},
+			"windows": {
+				"command": "C:/cseapp/CodeLite/mingw32-make run_windows"
+			},
 			"problemMatcher": [],
 			"group": "build"
 		},
 		{
-			"label": "build_linux",
+			"label": "query",
 			"type": "shell",
-			"command": "make build_linux",
-			"group": "build"
-		},
-		{
-			"label": "run_hardware_linux",
-			"type": "shell",
-			"command": "make run_linux",
-			"problemMatcher": [],
-			"group": "build"
-		},
-		{
-			"label": "query_linux",
-			"type": "shell",
-			"command": "make query_linux",
-			"problemMatcher": []
-		},
-		{
-			"label": "query_windows",
-			"type": "shell",
-			"command": "C:/cseapp/CodeLite/mingw32-make query_windows",
+			"linux": {
+				"command": "make query_linux"
+			},
+			"windows": {
+				"command": "C:/cseapp/CodeLite/mingw32-make query_windows"
+			},
 			"problemMatcher": []
 		},
 	]
