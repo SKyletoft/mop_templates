@@ -23,10 +23,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 	vscode.commands.registerCommand('md407.set_port', (entry) => {
 		port = entry.label;
+		vscode.window.showInformationMessage("Port set to " + port);
 	});
 
 	vscode.commands.registerCommand('md407.set_rate', (entry) => {
 		baud_rate = entry.label;
+		vscode.window.showInformationMessage("Baud rate set to " + baud_rate);
 	});
 
 	vscode.window.createTreeView(
