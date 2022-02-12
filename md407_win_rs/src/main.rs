@@ -1,4 +1,4 @@
-use std::{io::Write, slice, time::Duration};
+use std::{io::Write, slice, time::Duration, borrow::Cow};
 
 use clap::Parser;
 use crossterm::{
@@ -66,7 +66,7 @@ fn main() {
 }
 
 fn connect(name: &str, baud_rate: u32) -> Result<impl SerialPort> {
-	let mut port = serialport::new(name, baud_rate).open_native()?;
+	let mut port = serialport::new(musl_fix(name), baud_rate).open_native()?;
 	port.set_timeout(Duration::from_millis(50))?;
 	Ok(port)
 }
@@ -74,17 +74,19 @@ fn connect(name: &str, baud_rate: u32) -> Result<impl SerialPort> {
 fn query_mode() -> Result<()> {
 	let ports = serialport::available_ports()?;
 	for port in ports.iter() {
-		println!("{}", port.port_name);
+		println!("{}", musl_fix(&port.port_name));
 	}
 	Ok(())
 }
 
 fn load_mode(mut port: impl SerialPort, filename: &str) -> Result<()> {
+
 	let file = std::fs::read(filename)?;
 	port.write_all(b"load\n")?;
 	port.write_all(&file)?;
 
-	#[cfg(windows)]
+	// Testing with hardware shows that this is required
+	#[cfg(target_os = "windows")]
 	port.write_all(b"\n")?;
 
 	Ok(())
@@ -151,4 +153,19 @@ fn interactive_mode(mut port: impl SerialPort) -> Result<()> {
 	writeln!(stdout)?;
 
 	Ok(())
+}
+
+/// Hack to replace /sys/class/tty with /dev with musl
+fn musl_fix(filename: &str) -> Cow<str> {
+	#[cfg(target_os = "linux")]
+	{
+		if let Some(device_name) = filename.strip_prefix("/sys/class/tty") {
+			(String::from("/dev") + device_name).into()
+		} else {
+			filename.into()
+		}
+	}
+
+	#[cfg(not(target_os = "linux"))]
+	filename.into()
 }
