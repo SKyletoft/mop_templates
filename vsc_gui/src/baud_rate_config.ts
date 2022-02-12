@@ -10,9 +10,7 @@ export class BaudRateConfig implements vscode.TreeDataProvider<TreeItem> {
 	}
 
 	getChildren(element?: TreeItem): Thenable<TreeItem[]> {
-		return Promise.resolve([
-			new vscode.TreeItem("115'200", vscode.TreeItemCollapsibleState.None),
-			new vscode.TreeItem("124'400", vscode.TreeItemCollapsibleState.None),
-		]);
+		const f = (s: string) => new vscode.TreeItem(s, vscode.TreeItemCollapsibleState.None);
+		return Promise.resolve(["115'200", "124'400"].map(f));
 	}
 }

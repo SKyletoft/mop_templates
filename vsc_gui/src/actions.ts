@@ -10,11 +10,8 @@ export class Actions implements vscode.TreeDataProvider<TreeItem> {
 	}
 
 	getChildren(element?: TreeItem): Thenable<TreeItem[]> {
-		return Promise.resolve([
-			new vscode.TreeItem("Compile", vscode.TreeItemCollapsibleState.None),
-			new vscode.TreeItem("Load", vscode.TreeItemCollapsibleState.None),
-			new vscode.TreeItem("Go", vscode.TreeItemCollapsibleState.None),
-			new vscode.TreeItem("Interactive", vscode.TreeItemCollapsibleState.None),
-		]);
+		const f = (s: string) => new vscode.TreeItem(s, vscode.TreeItemCollapsibleState.None);
+		// Any change to these labels needs to be propagated to extension.ts
+		return Promise.resolve(["Compile", "Load", "Go", "Interactive"].map(f));
 	}
 }
