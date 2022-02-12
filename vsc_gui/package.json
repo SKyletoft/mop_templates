@@ -1,25 +1,45 @@
 {
-  "name": "md407-code",
+	"name": "md407-code",
 	"displayName": "md407-code",
-	"description": "An extension to add md407 hardware interaction into the gui",
+	"description": "",
 	"version": "0.0.1",
 	"engines": {
-		"vscode": "^1.64.0"
+		"vscode": "^1.63.0"
 	},
 	"categories": [
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:md407-code.helloWorld"
+		"onStartupFinished"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [
-			{
-				"command": "md407-code.helloWorld",
-				"title": "Hello World"
-			}
-		]
+		"commands": [],
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"icon": "media/md407.svg",
+					"id": "md407-config",
+					"title": "MD407 Config"
+				}
+			]
+		},
+		"views": {
+			"md407-config": [
+				{
+					"id": "md407-actions",
+					"name": "Action"
+				},
+				{
+					"id": "md407-ports",
+					"name": "Port Config"
+				},
+				{
+					"id": "md407-rates",
+					"name": "Baud Rate Config"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
@@ -30,7 +50,7 @@
 		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {
-		"@types/vscode": "^1.64.0",
+		"@types/vscode": "^1.63.0",
 		"@types/glob": "^7.2.0",
 		"@types/mocha": "^9.0.0",
 		"@types/node": "14.x",
