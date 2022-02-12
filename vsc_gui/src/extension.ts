@@ -6,11 +6,29 @@ import { BaudRateConfig } from './baud_rate_config';
 import { Actions } from './actions';
 
 let port = "";
-let baud_rate = "";
+let baud_rate = "115'200";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+	vscode.commands.registerCommand('md407.run', (entry) => {
+		switch (entry.label) {
+			case "Compile": break;
+			case "Load": break;
+			case "Go": break;
+			case "Interactive": break;
+		}
+		console.log([entry.label, port, baud_rate].join(" "));
+	});
+
+	vscode.commands.registerCommand('md407.set_port', (entry) => {
+		port = entry.label;
+	});
+
+	vscode.commands.registerCommand('md407.set_rate', (entry) => {
+		baud_rate = entry.label;
+	});
+
 	vscode.window.createTreeView(
 		'md407-ports', {
 		treeDataProvider: new PortConfig()
