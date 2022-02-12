@@ -3,8 +3,6 @@ USAGE:
 This template requires SimServer to be installed from gbgmv.se.
 The Clangd (and not Microsoft's C/C++) and Clang-format extensions are recommended but not required.
 
-Windows users also need to install CodeLite from the same site.
-
 Debian based Linux users require the following packages from the repo:
 
 `gdb-multiarch` `make` `gcc-arm-none-eabi` `libnewlib-arm-none-eabi` `libnewlib-nano-arm-none-eabi`
@@ -22,16 +20,9 @@ Simserver instructions
     This should compile and start the program and break on entry into the main function
 
 Hardware instructions
-1. Hit Ctrl + Shift + P and type `Run Task`
-2. Select query_linux/windows
-3. Edit the `LINUX`/`WINDOWS_PORT` variable in `makefile` to reflect the query output. Hopefully the default is already correct
-4. Hit Ctrl + Shift + P and type `Run Task`
-5. Press the reset button on the md407
-6. Select `run_hardware_linux`/`windows`
-    This should compile and start the program on the md407. Type `go` to start your program or `dbg` to use the hardware debugging capabilities
-
-The Task Runner extension exists if you want to move the tasks into the explorer instead of using Ctrl + Shift + P
+1. Open the `MD407 Config` tab
+2. Set port. Hopefully there'll only be one to choose from, but if there are several you will just have to try them all
+3. Press `Do` next to `Compile`, `Load` and `Interactive` in that order. Wait for `Load` to complete before starting `Interactive`
+4. Type `go` in the terminal
 
 To add additional source files, just add them to the `FILES` variable in `makefile`. Make sure all lines but the last one end with `\`.
-
-Users who prefer to use GDB directly in the terminal can copy in the .gdbinit file from the top level to automate loading and connecting to simserver

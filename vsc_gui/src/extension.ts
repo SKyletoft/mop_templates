@@ -5,6 +5,7 @@ import { PortConfig } from './port_config';
 import { BaudRateConfig } from './baud_rate_config';
 import { Actions } from './actions';
 import { MD407WinRsWrapper } from './native_com';
+import { instanciate_template } from './template_creation';
 
 let port = "";
 let baud_rate = "115'200";
@@ -64,10 +65,12 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage("Baud rate set to " + baud_rate);
 	});
 
-	let ports = new PortConfig();
-	vscode.window.createTreeView(
-		'md407-ports', {
-		treeDataProvider: ports
+	vscode.commands.registerCommand('md407.new_basic', () => {
+		instanciate_template('basic');
+	});
+
+	vscode.commands.registerCommand('md407.new_crt', () => {
+		instanciate_template('crt');
 	});
 
 	vscode.window.createTreeView(
@@ -80,6 +83,12 @@ export function activate(context: vscode.ExtensionContext) {
 		'md407-actions', {
 		treeDataProvider: new Actions(),
 		canSelectMany: false,
+	});
+
+	const ports = new PortConfig();
+	vscode.window.createTreeView(
+		'md407-ports', {
+		treeDataProvider: ports
 	});
 
 	vscode.commands.registerCommand('md407.reload_ports', (entry) => {
