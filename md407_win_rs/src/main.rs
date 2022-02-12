@@ -89,6 +89,7 @@ fn load_mode(mut port: impl SerialPort, filename: &str) -> Result<()> {
 	#[cfg(target_os = "windows")]
 	port.write_all(b"\n")?;
 
+	println!("Load complete");
 	Ok(())
 }
 
