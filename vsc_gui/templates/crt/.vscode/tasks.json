@@ -9,35 +9,7 @@
 				"kind": "build",
 				"isDefault": true
 			},
-			"linux": {
-				"command": "make build_linux"
-			},
-			"windows": {
-				"command": "C:/cseapp/CodeLite/mingw32-make build_windows"
-			}
-		},
-		{
-			"label": "run_hardware",
-			"type": "shell",
-			"linux": {
-				"command": "make run_linux"
-			},
-			"windows": {
-				"command": "C:/cseapp/CodeLite/mingw32-make run_windows"
-			},
-			"problemMatcher": [],
-			"group": "build"
-		},
-		{
-			"label": "query",
-			"type": "shell",
-			"linux": {
-				"command": "make query_linux"
-			},
-			"windows": {
-				"command": "C:/cseapp/CodeLite/mingw32-make query_windows"
-			},
-			"problemMatcher": []
-		},
+			"command": "make build"
+		}
 	]
 }
