@@ -18,15 +18,16 @@ export class MD407WinRsWrapper {
 
 	load(port: string, baud_rate: number) {
 		let workspace_folder = vscode.workspace.workspaceFolders?.map((folder) => folder.uri.path)[0] || "~";
-		if (process.platform == "win32" && workspace_folder.startsWith("/")) {
+		if (process.platform === "win32" && workspace_folder.startsWith("/")) {
 			workspace_folder = workspace_folder.substring(1);
 		}
-		
+
 		const out_path = workspace_folder + "/" + "debug/MOP.s19";
 		const exists = fs.existsSync(out_path);
 
 		if (!exists) {
 			vscode.window.showErrorMessage("No file to send. Have you compiled?");
+			return;
 		}
 
 		const out = execFileSync(
