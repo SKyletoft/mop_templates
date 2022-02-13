@@ -9,4 +9,3 @@ This is an extension to integrate the Chalmers MD407 development board into Visu
 ## Known Issues
 
 No Mac support
-
