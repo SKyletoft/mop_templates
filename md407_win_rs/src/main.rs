@@ -1,12 +1,12 @@
-use std::{io::Write, slice, time::Duration, borrow::Cow};
+use std::{borrow::Cow, io::Write, slice, time::Duration};
 
+use anyhow::Result;
 use clap::Parser;
 use crossterm::{
 	event::{self, Event, KeyCode, KeyEvent, KeyModifiers},
 	terminal,
 };
 use serialport::SerialPort;
-use anyhow::Result;
 
 #[derive(Parser, Debug, PartialEq, Clone)]
 #[clap(author, about)]
@@ -58,7 +58,9 @@ fn main() {
 			filename,
 		} => connect(&port, baud_rate).and_then(|connection| load_mode(connection, &filename)),
 		Mode::Go { port, baud_rate } => connect(&port, baud_rate).and_then(go_mode),
-		Mode::Interactive { port, baud_rate } => connect(&port, baud_rate).and_then(interactive_mode),
+		Mode::Interactive { port, baud_rate } => {
+			connect(&port, baud_rate).and_then(interactive_mode)
+		}
 		Mode::Query => query_mode(),
 	} {
 		eprintln!("Error: {e:?}");
@@ -80,7 +82,6 @@ fn query_mode() -> Result<()> {
 }
 
 fn load_mode(mut port: impl SerialPort, filename: &str) -> Result<()> {
-
 	let file = std::fs::read(filename)?;
 	port.write_all(b"load\n")?;
 	port.write_all(&file)?;
@@ -133,8 +134,7 @@ fn interactive_mode(mut port: impl SerialPort) -> Result<()> {
 		if matches!(port.bytes_to_read(), Ok(n) if n != 0) {
 			// We only read a single byte at a time because the hardware times
 			// out otherwise
-			let _ = port
-				.read(slice::from_mut(&mut small_buffer))?;
+			let _ = port.read(slice::from_mut(&mut small_buffer))?;
 
 			// Windows can't handle printing 0xFF
 			if small_buffer == u8::MAX {
