@@ -33,6 +33,12 @@ To communicate with the hardware, the `md407_win_rs` program is provided. Either
 
 ## External Links
 
-[SimServer](http://gbgmv.se/studies.html#machprog)
+[SimServer and Eterm8](http://gbgmv.se/studies.html#machprog)
 
 [GCC for Windows](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
+
+> *You have to check the `Add to PATH` box on the last page*
+
+[Make for Windows](https://github.com/mbuilov/gnumake-windows/raw/d6f3ed158d476c0a509583a6ff09351fbc85505f/gnumake-4.3.exe)
+
+> *This file needs to be copied into `C:\Program Files (x86)\GNU Arm Embedded Toolchain\10 2021.10\bin\make.exe`. Note the shortened file name*
