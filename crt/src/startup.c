@@ -1,7 +1,7 @@
-/// startup_crt.c
+/// startup.c
 /// includes: _crt_init, _crt_deinit, _sbrk for malloc-support.
 /// template functions for stdio:
-#include "startup_crt.h"
+#include "startup.h"
 
 __attribute__((naked)) __attribute__((section(".start_section"))) void startup(void) {
 	__asm__ volatile(" LDR R0,=__stack_top\n"); /* set stack */

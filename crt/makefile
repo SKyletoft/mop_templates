@@ -1,7 +1,7 @@
 # Add files here and remember the backslash on all but the last line
+# Yes, startup.c is missing
 FILES := \
 	src/main.c \
-	src/startup.c \
 	src/debug.c
 
 #                       +---------------------------------------------------------------------------+
@@ -30,6 +30,10 @@ build:
 
 build-release:
 	-mkdir release
+	arm-none-eabi-gcc -c src/startup.c -g -Os \
+		-w \
+		-mthumb -march=armv6-m -mno-unaligned-access -mfloat-abi=soft \
+		-std=gnu17 -I. -I ./inc
 	arm-none-eabi-gcc -c $(FILES) -g -Os \
 		-Wall -Wextra -Werror \
 		-mthumb -march=armv6-m -mno-unaligned-access -mfloat-abi=soft \

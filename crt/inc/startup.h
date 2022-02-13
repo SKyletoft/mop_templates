@@ -1,6 +1,6 @@
 #pragma once
 /*
- * 	startup-crt.c
+ * 	startup.h
  *  includes: _crt_init, _crt_deinit, _sbrk for malloc-support.
  *  template functions for stdio:
  */
@@ -10,14 +10,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-__attribute__((naked)) __attribute__((section(".start_section"))) void startup(void);
 char *_sbrk(int incr);
-__attribute__((used))
-volatile static void
-_crt_init();
-__attribute__((used))
-volatile static void
-_crt_deinit();
 
 /* STDIO-templates */
 int _close(int file);
