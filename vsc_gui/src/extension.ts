@@ -49,7 +49,11 @@ export function activate(context: vscode.ExtensionContext) {
 				const NAME = "md407-interactive";
 				const term = vscode.window.terminals.find((t) => t.name === NAME) || vscode.window.createTerminal(NAME);
 				term.show();
-				term.sendText([md407_win_rs.path, "interactive", "--port", port, "--baud-rate", get_baud_rate()].join(" "), true);
+				if (process.platform == "win32") {
+					term.sendText(["cls\n& '" + md407_win_rs.path + "'", "interactive", "--port", port, "--baud-rate", get_baud_rate()].join(" "), true);
+				} else {
+					term.sendText([md407_win_rs.path, "interactive", "--port", port, "--baud-rate", get_baud_rate()].join(" "), true);
+				}
 			} break;
 		}
 		console.log([entry.label, port, baud_rate].join(" "));

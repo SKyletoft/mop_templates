@@ -17,7 +17,11 @@ export class MD407WinRsWrapper {
 	}
 
 	load(port: string, baud_rate: number) {
-		const workspace_folder = vscode.workspace.workspaceFolders?.map((folder) => folder.uri.path)[0] || "~";
+		let workspace_folder = vscode.workspace.workspaceFolders?.map((folder) => folder.uri.path)[0] || "~";
+		if (process.platform == "win32" && workspace_folder.startsWith("/")) {
+			workspace_folder = workspace_folder.substring(1);
+		}
+		
 		const out_path = workspace_folder + "/" + "debug/MOP.s19";
 		const exists = fs.existsSync(out_path);
 
@@ -27,7 +31,7 @@ export class MD407WinRsWrapper {
 
 		const out = execFileSync(
 			this.path,
-			['load', '--filename', out_path, '--port', port, '--baud-rate', baud_rate.toString()],
+			['load', '--filename', out_path.replace(" ", "\ "), '--port', port, '--baud-rate', baud_rate.toString()],
 			{ timeout: 60000 } // One minute
 		).toString('utf8');
 		console.log(out);
