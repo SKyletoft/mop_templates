@@ -3,7 +3,7 @@
 #include "startup.h"
 #include "debug.h"
 
-void main(void) {
+int main(void) {
 	long long x = 15;
 	long long y = 13;
 	long long z = x + y;
