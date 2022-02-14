@@ -38,6 +38,7 @@ To communicate with the hardware, the `md407_win_rs` program is provided. Either
 [GCC for Windows/MacOS](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
 
 > *You have to check the `Add to PATH` box on the last page*
+> It's also important to actually fully reboot after this installation.
 
 [Make for Windows](https://github.com/mbuilov/gnumake-windows/raw/d6f3ed158d476c0a509583a6ff09351fbc85505f/gnumake-4.3.exe)
 
