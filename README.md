@@ -10,7 +10,7 @@ Once you have all the required programs, open VSC in an empty folder and hit `Ct
 
 You can now run the default program in SimServer by opening SimServer, then going to the debugging tab and hitting the green arrow.
 
-You can also run the default program on Hardware by going to the MD407 Config tab (added by the extension), selecting the port under the ports section and then hitting `Interactive`, `Compile` and `Load` in order and then typing `go` in the now opened terminal. Remember to reset the MD407 between runs.
+You can also run the default program on Hardware by going to the MD407 Config tab (added by the extension), selecting the port under the ports section and then hitting `Interactive`, `Compile` and `Load` in order and then typing `go` in the now opened terminal. Remember to reset the MD407 between runs. MacOS requires resets between load and `go`.
 
 ### Recommended extensions
 
