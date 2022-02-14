@@ -2,7 +2,7 @@
 
 ## VS Code users:
 
-Install the extension from the releases page, along with SimServer from gbgmv.se, the arm gcc toolchain and make. On Windows, this can be found on ARM's website (linked below), on Linux, it's available from your package manager. You also need to install the `Native Debug` extension by Web Freaks
+Install the extension from the releases page, along with SimServer from gbgmv.se, the arm gcc toolchain and make. On Windows and MacOS, this can be found on ARM's website (linked below), on Linux, it's available from your package manager. You also need to install the `Native Debug` extension by Web Freaks
 
 **Linux users need to add their user to the `dialout` group or equivalent and reboot (really reboot, for once logging out and in again is not enough)**
 
@@ -35,7 +35,7 @@ To communicate with the hardware, the `md407_win_rs` program is provided. Either
 
 [SimServer and Eterm8](http://gbgmv.se/studies.html#machprog)
 
-[GCC for Windows](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
+[GCC for Windows/MacOS](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
 
 > *You have to check the `Add to PATH` box on the last page*
 
