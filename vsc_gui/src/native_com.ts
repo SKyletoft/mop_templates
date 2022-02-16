@@ -40,7 +40,7 @@ export class MD407WinRsWrapper {
 	}
 
 	go(port: string, baud_rate: number): string {
-		return execFileSync(this.path, ['go', '--port', port, '--rate', baud_rate.toString()]).toString('utf8');
+		return execFileSync(this.path, ['go', '--port', port, '--baud-rate', baud_rate.toString()]).toString('utf8');
 	}
 }
 
