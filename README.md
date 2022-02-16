@@ -4,7 +4,7 @@
 
 Install the extension from the releases page, along with SimServer from gbgmv.se, the arm gcc toolchain and make. On Windows and MacOS, this can be found on ARM's website (linked below), on Linux, it's available from your package manager. You also need to install the `Native Debug` extension by Web Freaks
 
-**Linux users need to add their user to the `dialout` group or equivalent and reboot (really reboot, for once logging out and in again is not enough)**
+**Linux users need to add their user to the `dialout` group or equivalent and reboot (really reboot, for once logging out and in again is not enough). This group needs to be created on Arch**
 
 Once you have all the required programs, open VSC in an empty folder and hit `Ctrl + Shift + P` and type `Create new project from Basic template`.
 
@@ -24,6 +24,12 @@ You can also run the default program on Hardware by going to the MD407 Config ta
 * `gcc-arm-none-eabi`
 * `libnewlib-arm-none-eabi`
 * `libnewlib-nano-arm-none-eabi`
+
+### Required packages, as they're called on Arch (Manjaro, Artix...)
+
+* `gdb-multiarch`
+* `arm-none-eabi-gcc`
+* `arm-none-eabi-newlib`
 
 ## VIM / NeoVIM / CLion / Emacs / etc.
 
