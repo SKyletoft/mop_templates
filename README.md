@@ -27,7 +27,7 @@ You can also run the default program on Hardware by going to the MD407 Config ta
 
 ### Required packages, as they're called on Arch (Manjaro, Artix...)
 
-* `gdb-multiarch`
+* `arm-none-eabi-gdb` (needs to be aliased to `gdb-multiarch` or have `.vscode/launch.json` changed)
 * `arm-none-eabi-gcc`
 * `arm-none-eabi-newlib`
 
