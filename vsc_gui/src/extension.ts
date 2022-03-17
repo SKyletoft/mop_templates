@@ -6,10 +6,14 @@ import { BaudRateConfig } from './baud_rate_config';
 import { Actions } from './actions';
 import { MD407WinRsWrapper } from './native_com';
 import { instanciate_template } from './template_creation';
+import { CustomBuildTaskProvider } from './build_task';
+import { download } from './download_native';
 
 let port = "";
 let baud_rate = "115'200";
 const md407_win_rs = new MD407WinRsWrapper();
+const workspace_root = (vscode.workspace.workspaceFolders && (vscode.workspace.workspaceFolders.length > 0))
+	? vscode.workspace.workspaceFolders[0].uri.fsPath : "~";
 
 function get_baud_rate() {
 	let filtered = baud_rate.replace("'", "");
@@ -21,13 +25,18 @@ function get_baud_rate() {
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 	download();
+
+	const build_task = new CustomBuildTaskProvider(workspace_root);
+	vscode.tasks.registerTaskProvider(CustomBuildTaskProvider.CustomBuildScriptType, build_task);
+
 	vscode.commands.registerCommand('md407.run', async (entry) => {
 		switch (entry.label) {
 			case "Compile": {
-				const tasks = await vscode.tasks.fetchTasks();
-				const build_task = tasks.filter((task) => task.name === 'build')[0];
-				console.log(tasks);
-				await vscode.tasks.executeTask(build_task);
+				//const tasks = await vscode.tasks.fetchTasks();
+				//const build_task = tasks.filter((task) => task.name === 'build')[0];
+				//console.log(tasks);
+				//await vscode.tasks.executeTask(build_task);
+				await (await vscode.tasks.executeTask((await build_task.provideTasks())[0]));
 			} break;
 			case "Load": {
 				if (port === "") {

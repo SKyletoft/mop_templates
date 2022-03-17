@@ -10,26 +10,38 @@ const LINUX_URL: string = "https://u.dtek.se/mop_deps_linux";
 const WINDOWS_URL: string = "https://u.dtek.se/mop_deps_windows";
 const MAC_URL: string = "https://u.dtek.se/mop_deps_mac";
 
-const TMP_FILE: string = ROOT + "/files.zip";
+const TMP_FILE: string = ROOT + "/native_dependencies/files.zip";
+const NATIVE_FOLDER: string = ROOT + "/native_dependencies";
+const DONE: string = ROOT + "/native_dependencies/done";
 
 export function download() {
-	// Todo: create native_deps folder
-	const downloaded_before = fs.existsSync(ROOT + "/native_dependencies/done");
-	if (downloaded_before) { return; }
+	const downloaded_before = fs.existsSync(DONE);
+	if (downloaded_before) {
+		console.log("Already downloaded, cancelling download");
+		return;
+	}
+
+
+	if (!fs.existsSync(NATIVE_FOLDER)) {
+		fs.mkdirSync(NATIVE_FOLDER);
+	}
 
 	let url;
 	switch (process.platform) {
 		case "linux":
 			url = LINUX_URL;
 			break;
-		case "win32":
-			url = WINDOWS_URL;
-			break;
 		case "darwin":
 			url = MAC_URL;
 			break;
+		default:
+			url = WINDOWS_URL;
+			break;
 	}
+	url = WINDOWS_URL;
 
+	console.log(`Downloading: ${url}`);
+	vscode.window.showInformationMessage("Download starting (~200MB, and I don't have a progress bar yet)");
 	progress(request(url))
 		.on('progress', function (state: any) {
 			console.log('progress', state.percent);
@@ -44,9 +56,9 @@ export function download() {
 			console.log(TMP_FILE);
 			const zip = new unzip(TMP_FILE);
 			console.log(3);
-			zip.extractAllTo(ROOT + "/native_dependencies", true);
+			zip.extractAllTo(NATIVE_FOLDER, true);
 			console.log(4);
-			fs.createWriteStream(ROOT + "/native_dependencies/done").close(); // Create file to mark that we don't need to redownload
+			fs.createWriteStream(DONE).close(); // Create file to mark that we don't need to redownload
 			console.log(`File downloaded!`);
 			vscode.window.showInformationMessage("File extracted");
 		})

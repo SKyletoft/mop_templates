@@ -98,7 +98,14 @@
 					"group": "inline"
 				}
 			]
-		}
+		},
+		"taskDefinitions": [
+			{
+				"type": "custombuildscript",
+				"required": [],
+				"properties": {}
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
@@ -120,5 +127,15 @@
 		"glob": "^7.2.0",
 		"mocha": "^9.1.3",
 		"typescript": "^4.5.5"
-	}
+	},
+	"dependencies": {
+		"adm-zip": "^0.5.9",
+		"request": "^2.88.2",
+		"request-progress": "^3.0.0"
+	},
+	"extensionDependencies": [
+		"webfreak.debug",
+		"llvm-vs-code-extensions.vscode-clangd",
+		"xaver.clang-format"
+	]
 }
