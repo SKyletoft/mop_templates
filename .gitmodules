@@ -1,0 +1,3 @@
+[submodule "cross_gcc_distrubution"]
+	path = cross_gcc_distrubution
+	url = git@github.com:SKyletoft/cross_gcc_distrubution.git
