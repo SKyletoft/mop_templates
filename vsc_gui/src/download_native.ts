@@ -21,7 +21,6 @@ export function download() {
 		return;
 	}
 
-
 	if (!fs.existsSync(NATIVE_FOLDER)) {
 		fs.mkdirSync(NATIVE_FOLDER);
 	}
@@ -38,7 +37,6 @@ export function download() {
 			url = WINDOWS_URL;
 			break;
 	}
-	url = WINDOWS_URL;
 
 	console.log(`Downloading: ${url}`);
 	vscode.window.showInformationMessage("Download starting (~200MB, and I don't have a progress bar yet)");
