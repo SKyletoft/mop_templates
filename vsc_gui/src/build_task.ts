@@ -34,12 +34,15 @@ export class CustomBuildTaskProvider implements vscode.TaskProvider {
 			};
 		}
 		const root = vscode.extensions.getExtension("skyletoft.md407-code")?.extensionPath || "";
+		const var_separator = process.platform == "win32" ? ";" : ":";
+		const path_separator = process.platform == "win32" ? "\\" : "/";
+		console.log(root);
 		return new vscode.Task(
 			definition,
 			vscode.TaskScope.Workspace,
 			"Build for md407",
 			CustomBuildTaskProvider.CustomBuildScriptType,
-			new vscode.ShellExecution("make", ["build"], { env: { PATH: process.env.PATH + `:${root}/native_dependencies` } })
+			new vscode.ShellExecution("make", [], { env: { PATH: process.env.PATH + `${var_separator}${root}${path_separator}native_dependencies` } })
 		);
 	}
 }
