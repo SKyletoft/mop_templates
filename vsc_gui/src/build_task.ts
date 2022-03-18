@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as vscode from 'vscode';
 
 export class CustomBuildTaskProvider implements vscode.TaskProvider {
-	static CustomBuildScriptType = 'custombuildscript';
+	static CustomBuildScriptType = "md407-build";
 	private tasks: vscode.Task[] | undefined;
 
 	constructor(private workspaceRoot: string) { }
@@ -34,15 +34,19 @@ export class CustomBuildTaskProvider implements vscode.TaskProvider {
 			};
 		}
 		const root = vscode.extensions.getExtension("skyletoft.md407-code")?.extensionPath || "";
-		const var_separator = process.platform == "win32" ? ";" : ":";
-		const path_separator = process.platform == "win32" ? "\\" : "/";
+		const var_separator = process.platform === "win32" ? ";" : ":";
+		const path_separator = process.platform === "win32" ? "\\" : "/";
 		console.log(root);
 		return new vscode.Task(
 			definition,
 			vscode.TaskScope.Workspace,
 			"Build for md407",
 			CustomBuildTaskProvider.CustomBuildScriptType,
-			new vscode.ShellExecution("make", [], { env: { PATH: process.env.PATH + `${var_separator}${root}${path_separator}native_dependencies` } })
+			new vscode.ShellExecution(
+				"make",
+				[],
+				{ env: { PATH: process.env.PATH + `${var_separator}${root}${path_separator}native_dependencies/bin` }
+			})
 		);
 	}
 }

@@ -2,14 +2,9 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "build",
-			"type": "shell",
+			"type": "md407-build",
 			"problemMatcher": [],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
-			"command": "make build"
+			"label": "build"
 		}
 	]
 }

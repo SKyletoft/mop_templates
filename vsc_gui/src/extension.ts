@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
 				//const build_task = tasks.filter((task) => task.name === 'build')[0];
 				//console.log(tasks);
 				//await vscode.tasks.executeTask(build_task);
-				await (await vscode.tasks.executeTask((await build_task.provideTasks())[0]));
+				await vscode.tasks.executeTask((await build_task.provideTasks())[0]);
 			} break;
 			case "Load": {
 				if (port === "") {

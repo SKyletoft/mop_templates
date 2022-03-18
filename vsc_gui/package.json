@@ -101,7 +101,7 @@
 		},
 		"taskDefinitions": [
 			{
-				"type": "custombuildscript",
+				"type": "md407-build",
 				"required": [],
 				"properties": {}
 			}
