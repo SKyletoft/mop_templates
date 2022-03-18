@@ -46,12 +46,12 @@ export class MD407WinRsWrapper {
 
 function get_path(): string {
 	const root: string = vscode.extensions.getExtension("skyletoft.md407-code")?.extensionPath || "";
-	const linux = "/native_dependencies/hardware-com-linux";
-	const windows = "/native_dependencies/hardware-com-windows.exe";
-	const darwin = "/native_dependencies/hardware-com-darwin";
+	const linux = "/native_dependencies/bin/hardware-com-linux";
+	const windows = "/native_dependencies/bin/hardware-com-windows.exe";
+	const darwin = "/native_dependencies/bin/hardware-com-darwin";
 	switch (process.platform) {
-		case "linux":  return root + linux;
-		case "win32":  return root + windows;
+		case "linux": return root + linux;
+		case "win32": return root + windows;
 		case "darwin": return root + darwin;
 		default: return "";
 	}
