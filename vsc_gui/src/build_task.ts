@@ -42,10 +42,8 @@ export class CustomBuildTaskProvider implements vscode.TaskProvider {
 			vscode.TaskScope.Workspace,
 			"Build for md407",
 			CustomBuildTaskProvider.CustomBuildScriptType,
-			new vscode.ShellExecution(
-				"make",
-				[],
-				{ env: { PATH: process.env.PATH + `${var_separator}${root}${path_separator}native_dependencies/bin` }
+			new vscode.ShellExecution("make", [], {
+				env: { PATH: process.env.PATH + `${var_separator}${root}${path_separator}native_dependencies/bin` }
 			})
 		);
 	}
