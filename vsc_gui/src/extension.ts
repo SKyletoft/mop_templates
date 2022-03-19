@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import { PortConfig } from './port_config';
 import { BaudRateConfig } from './baud_rate_config';
+import { FileList } from './file_list';
 import { Actions } from './actions';
 import { MD407WinRsWrapper } from './native_com';
 import { instanciate_template } from './template_creation';
@@ -11,6 +12,7 @@ import { download } from './download_native';
 
 let port = "";
 let baud_rate = "115'200";
+let project = "";
 const md407_win_rs = new MD407WinRsWrapper();
 const workspace_root = (vscode.workspace.workspaceFolders && (vscode.workspace.workspaceFolders.length > 0))
 	? vscode.workspace.workspaceFolders[0].uri.fsPath : "~";
@@ -39,12 +41,12 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.commands.registerCommand('md407.run', async (entry) => {
 		switch (entry.label) {
 			case "Compile": {
+				if (project === "") {
+					vscode.window.showErrorMessage("You have to set a project");
+					break;
+				}
 				const tasks = await vscode.tasks.fetchTasks();
-				const build_task = tasks.filter((task) => {
-					const group = task.group ?? { id: '', isDefault: false };
-					return group.id === 'build' && group.isDefault;
-				})[0];
-				console.log(tasks);
+				const build_task = tasks.filter((task) => task.name === `build ${project}`)[0];
 				await vscode.tasks.executeTask(build_task);
 			} break;
 			case "Load": {
@@ -52,11 +54,19 @@ export function activate(context: vscode.ExtensionContext) {
 					vscode.window.showErrorMessage("You have to set a port");
 					break;
 				}
-				md407_win_rs.load(port, get_baud_rate());
+				if (project === "") {
+					vscode.window.showErrorMessage("You have to set a project");
+					break;
+				}
+				md407_win_rs.load(port, get_baud_rate(), project);
 			} break;
 			case "Go": {
 				if (port === "") {
 					vscode.window.showErrorMessage("You have to set a port");
+					break;
+				}
+				if (project === "") {
+					vscode.window.showErrorMessage("You have to set a project");
 					break;
 				}
 				md407_win_rs.go(port, get_baud_rate());
@@ -89,6 +99,11 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage("Baud rate set to " + baud_rate);
 	});
 
+	vscode.commands.registerCommand('md407.set_project', (entry) => {
+		project = entry.label;
+		vscode.window.showInformationMessage("Project set to " + project);
+	});
+
 	vscode.commands.registerCommand('md407.new_basic', async () => {
 		let new_name = await vscode.window.showInputBox();
 		if (new_name === "" || new_name === undefined) {
@@ -103,6 +118,17 @@ export function activate(context: vscode.ExtensionContext) {
 			new_name = "1-1";
 		}
 		instanciate_template('crt', new_name);
+	});
+
+	const file_list = new FileList();
+	vscode.window.createTreeView(
+		'md407-projects', {
+		treeDataProvider: file_list,
+		canSelectMany: false,
+	});
+
+	vscode.commands.registerCommand('md407.reload_projects', (entry) => {
+		file_list.refresh();
 	});
 
 	vscode.window.createTreeView(

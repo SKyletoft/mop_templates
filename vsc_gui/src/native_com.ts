@@ -16,13 +16,13 @@ export class MD407WinRsWrapper {
 		return execFileSync(this.path, ['query']).toString('utf8');
 	}
 
-	load(port: string, baud_rate: number) {
+	load(port: string, baud_rate: number, project: string) {
 		let workspace_folder = vscode.workspace.workspaceFolders?.map((folder) => folder.uri.path)[0] || "~";
 		if (process.platform === "win32" && workspace_folder.startsWith("/")) {
 			workspace_folder = workspace_folder.substring(1);
 		}
 
-		const out_path = workspace_folder + "/" + "debug/MOP.s19";
+		const out_path = `${workspace_folder}/${project}/debug/MOP.s19`;
 		const exists = fs.existsSync(out_path);
 
 		if (!exists) {

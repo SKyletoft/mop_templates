@@ -28,6 +28,18 @@
 				}
 			},
 			{
+				"command": "md407.reload_projects",
+				"title": "Reload projects",
+				"icon": {
+					"light": "media/light_refresh.svg",
+					"dark": "media/dark_refresh.svg"
+				}
+			},
+			{
+				"command": "md407.set_project",
+				"title": "Set project"
+			},
+			{
 				"command": "md407.set_port",
 				"title": "Set port"
 			},
@@ -60,6 +72,10 @@
 		"views": {
 			"md407-config": [
 				{
+					"id": "md407-projects",
+					"name": "Project"
+				},
+				{
 					"id": "md407-actions",
 					"name": "Action"
 				},
@@ -79,12 +95,22 @@
 					"command": "md407.reload_ports",
 					"when": "view == md407-ports",
 					"group": "navigation"
+				},
+				{
+					"command": "md407.reload_projects",
+					"when": "view == md407-projects",
+					"group": "navigation"
 				}
 			],
 			"view/item/context": [
 				{
 					"command": "md407.run",
 					"when": "view == md407-actions",
+					"group": "inline"
+				},
+				{
+					"command": "md407.set_project",
+					"when": "view == md407-projects",
 					"group": "inline"
 				},
 				{
