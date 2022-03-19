@@ -24,6 +24,11 @@ function get_baud_rate() {
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+
+	const var_separator = process.platform === "win32" ? ";" : ":";
+	const path_separator = process.platform === "win32" ? "\\" : "/";
+	context.environmentVariableCollection.append("PATH", `${var_separator}${workspace_root}${path_separator}native_dependencies${path_separator}bin`);
+
 	download();
 
 	const build_task = new CustomBuildTaskProvider(workspace_root);
