@@ -50,14 +50,10 @@ export function download() {
 		})
 		.on('end', () => {
 			vscode.window.showInformationMessage("Download complete");
-			console.log(1);
-			console.log(TMP_FILE);
 			const zip = new unzip(TMP_FILE);
-			console.log(3);
 			zip.extractAllTo(NATIVE_FOLDER, true);
-			console.log(4);
 			fs.createWriteStream(DONE).close(); // Create file to mark that we don't need to redownload
-			console.log(`File downloaded!`);
+			console.log(`File extracted!`);
 			vscode.window.showInformationMessage("File extracted");
 		})
 		.pipe(fs.createWriteStream(TMP_FILE));
