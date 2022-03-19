@@ -25,9 +25,11 @@ function get_baud_rate() {
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
+	// Add our tools to $PATH instead of hardcoding magic full paths everywhere
+	const extension_root = context.extension.extensionPath;
 	const var_separator = process.platform === "win32" ? ";" : ":";
 	const path_separator = process.platform === "win32" ? "\\" : "/";
-	context.environmentVariableCollection.append("PATH", `${var_separator}${workspace_root}${path_separator}native_dependencies${path_separator}bin`);
+	context.environmentVariableCollection.append("PATH", `${var_separator}${extension_root}${path_separator}native_dependencies${path_separator}bin`);
 
 	download();
 
@@ -37,11 +39,13 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.commands.registerCommand('md407.run', async (entry) => {
 		switch (entry.label) {
 			case "Compile": {
-				//const tasks = await vscode.tasks.fetchTasks();
-				//const build_task = tasks.filter((task) => task.name === 'build')[0];
-				//console.log(tasks);
-				//await vscode.tasks.executeTask(build_task);
-				await vscode.tasks.executeTask((await build_task.provideTasks())[0]);
+				const tasks = await vscode.tasks.fetchTasks();
+				const build_task = tasks.filter((task) => {
+					const group = task.group ?? { id: '', isDefault: false };
+					return group.id === 'build' && group.isDefault;
+				})[0];
+				console.log(tasks);
+				await vscode.tasks.executeTask(build_task);
 			} break;
 			case "Load": {
 				if (port === "") {
@@ -85,12 +89,20 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage("Baud rate set to " + baud_rate);
 	});
 
-	vscode.commands.registerCommand('md407.new_basic', () => {
-		instanciate_template('basic');
+	vscode.commands.registerCommand('md407.new_basic', async () => {
+		let new_name = await vscode.window.showInputBox();
+		if (new_name === "" || new_name === undefined) {
+			new_name = "1-1";
+		}
+		instanciate_template('basic', new_name);
 	});
 
-	vscode.commands.registerCommand('md407.new_crt', () => {
-		instanciate_template('crt');
+	vscode.commands.registerCommand('md407.new_crt', async () => {
+		let new_name = await vscode.window.showInputBox();
+		if (new_name === "" || new_name === undefined) {
+			new_name = "1-1";
+		}
+		instanciate_template('crt', new_name);
 	});
 
 	vscode.window.createTreeView(

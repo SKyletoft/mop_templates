@@ -137,8 +137,12 @@
 	},
 	"dependencies": {
 		"adm-zip": "^0.5.9",
+		"comment-json": "^4.2.2",
+		"debug": "github:WebFreak001/code-debug",
 		"request": "^2.88.2",
-		"request-progress": "^3.0.0"
+		"request-progress": "^3.0.0",
+		"vscode-debugadapter": "^1.51.0",
+		"vscode-debugprotocol": "^1.51.0"
 	},
 	"extensionDependencies": [
 		"webfreak.debug",
