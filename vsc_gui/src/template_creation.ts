@@ -32,7 +32,10 @@ export function instanciate_template(template_name: string, new_name: string) {
 			gdbpath: "gdb-multiarch"
 		},
 		windows: {
-			gdbpath: "arm-none-eabi-gdb"
+			gdbpath: `${extension_root}/native_dependencies/bin/arm-none-eabi-gdb.exe`
+		},
+		osx: {
+			gdbpath: `${extension_root}/native_dependencies/bin/arm-none-eabi-gdb`
 		},
 		name: `${new_name} - SimServer`,
 		type: "gdb",
