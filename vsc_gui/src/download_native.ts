@@ -6,7 +6,7 @@ const request = require('request');
 const progress = require('request-progress');
 
 const ROOT: string = vscode.extensions.getExtension("skyletoft.md407-code")?.extensionPath || "";
-const LINUX_URL: string = "https://github.com/SKyletoft/cross_gcc_distrubution/releases/download/v10.3.1/linux_deps.zip;
+const LINUX_URL: string = "https://github.com/SKyletoft/cross_gcc_distrubution/releases/download/v10.3.1/linux_deps.zip";
 const WINDOWS_URL: string = "https://github.com/SKyletoft/cross_gcc_distrubution/releases/download/v10.3.1/windows_deps.zip";
 const MAC_URL: string = "https://github.com/SKyletoft/cross_gcc_distrubution/releases/download/v10.3.1/mac_deps.zip";
 
