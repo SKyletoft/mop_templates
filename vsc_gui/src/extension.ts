@@ -105,19 +105,23 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	vscode.commands.registerCommand('md407.new_basic', async () => {
-		let new_name = await vscode.window.showInputBox();
-		if (new_name === "" || new_name === undefined) {
+		let new_name = await vscode.window.showInputBox({ title: "Enter project name:" });
+		if (new_name === "") {
 			new_name = "1-1";
 		}
-		instanciate_template('basic', new_name);
+		if (new_name !== undefined) {
+			instanciate_template('basic', new_name);
+		}
 	});
 
 	vscode.commands.registerCommand('md407.new_crt', async () => {
-		let new_name = await vscode.window.showInputBox();
-		if (new_name === "" || new_name === undefined) {
+		let new_name = await vscode.window.showInputBox({ title: "Enter project name:" });
+		if (new_name === "") {
 			new_name = "1-1";
 		}
-		instanciate_template('crt', new_name);
+		if (new_name !== undefined) {
+			instanciate_template('crt', new_name);
+		}
 	});
 
 	const file_list = new FileList();
