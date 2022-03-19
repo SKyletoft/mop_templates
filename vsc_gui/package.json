@@ -102,8 +102,15 @@
 		"taskDefinitions": [
 			{
 				"type": "md407-build",
-				"required": [],
-				"properties": {}
+				"required": [
+					"directory"
+				],
+				"properties": {
+					"directory": {
+						"type": "string",
+						"description": "The directory containing the makefile for that project"
+					}
+				}
 			}
 		]
 	},

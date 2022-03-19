@@ -1,6 +1,11 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
 
+interface CustomBuildTaskDefinition extends vscode.TaskDefinition {
+	/// The directory containing the makefile. Directly corresponds with `make -C`
+	directory: string;
+}
+
 export class CustomBuildTaskProvider implements vscode.TaskProvider {
 	static CustomBuildScriptType = "md407-build";
 	private tasks: vscode.Task[] | undefined;
@@ -12,9 +17,9 @@ export class CustomBuildTaskProvider implements vscode.TaskProvider {
 	}
 
 	public resolveTask(_task: vscode.Task): vscode.Task | undefined {
-		const flavor: string = _task.definition.flavor;
-		if (flavor) {
-			const definition: vscode.TaskDefinition = <any>_task.definition;
+		const directory: string = _task.definition.directory;
+		if (directory) {
+			const definition: CustomBuildTaskDefinition = <any>_task.definition;
 			return this.getTask(definition);
 		}
 		return undefined;
@@ -27,24 +32,20 @@ export class CustomBuildTaskProvider implements vscode.TaskProvider {
 		return this.tasks;
 	}
 
-	private getTask(definition?: vscode.TaskDefinition): vscode.Task {
+	private getTask(definition?: CustomBuildTaskDefinition): vscode.Task {
 		if (definition === undefined) {
 			definition = {
-				type: CustomBuildTaskProvider.CustomBuildScriptType
+				type: CustomBuildTaskProvider.CustomBuildScriptType,
+				directory: "."
 			};
 		}
-		const root = vscode.extensions.getExtension("skyletoft.md407-code")?.extensionPath || "";
-		const var_separator = process.platform === "win32" ? ";" : ":";
-		const path_separator = process.platform === "win32" ? "\\" : "/";
-		console.log(root);
+
 		return new vscode.Task(
 			definition,
 			vscode.TaskScope.Workspace,
 			"Build for md407",
 			CustomBuildTaskProvider.CustomBuildScriptType,
-			new vscode.ShellExecution("make", [], {
-				env: { PATH: process.env.PATH + `${var_separator}${root}${path_separator}native_dependencies/bin` }
-			})
+			new vscode.ShellExecution("make", ["-C", definition.directory])
 		);
 	}
 }
