@@ -2,13 +2,13 @@
 
 ## VS Code users:
 
-Install the extension from the releases page, along with SimServer from gbgmv.se, the arm gcc toolchain and make. On Windows and MacOS, this can be found on ARM's website (linked below), on Linux, it's available from your package manager. You also need to install the `Native Debug` extension by Web Freaks
+Install the extension from the releases page, along with SimServer from gbgmv.se.
 
 **Linux users need to add their user to the `dialout` group or equivalent and reboot (really reboot, for once logging out and in again is not enough). The equivalent on Arch is `uucp`.**
 
-Once you have all the required programs, open VSC in an empty folder and hit `Ctrl + Shift + P` and type `Create new project from Basic template`.
+Open VSC in an empty folder and hit `Ctrl + Shift + P` and type `Create new project from Basic template`. Then enter your project name.
 
-You can now run the default program in SimServer by opening SimServer, then going to the debugging tab and hitting the green arrow.
+You can now run the default program in SimServer by opening SimServer, then going to the debugging tab, selecting your project and hitting the green arrow.
 
 You can also run the default program on Hardware by going to the MD407 Config tab (added by the extension), selecting the port under the ports section and then hitting `Interactive`, `Compile` and `Load` in order and then typing `go` in the now opened terminal. Remember to reset the MD407 between runs. MacOS requires resets between load and `go`.
 
@@ -17,7 +17,9 @@ You can also run the default program on Hardware by going to the MD407 Config ta
 * clangd by LLVM
 * Clang-Format by xaver
 
-### Required packages, as they're called on Debian (Ubuntu, Pop, Mint...)
+## Required packages for Linux users (bundled for Windows/Mac)
+
+### Debian based systems
 
 * `gdb-multiarch`
 * `make`
@@ -25,7 +27,7 @@ You can also run the default program on Hardware by going to the MD407 Config ta
 * `libnewlib-arm-none-eabi`
 * `libnewlib-nano-arm-none-eabi`
 
-### Required packages, as they're called on Arch (Manjaro, Artix...)
+### Arch based systems
 
 * `arm-none-eabi-gdb` (needs to be aliased to `gdb-multiarch` or have `.vscode/launch.json` changed)
 * `arm-none-eabi-gcc`
@@ -41,11 +43,7 @@ To communicate with the hardware, the `md407_win_rs` program is provided. Either
 
 [SimServer and Eterm8](http://gbgmv.se/studies.html#machprog)
 
-[GCC for Windows/MacOS](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
-
-> *You have to check the `Add to PATH` box on the last page*
-> It's also important to actually fully reboot after this installation.
+[GCC 10 for Windows/MacOS](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
+> Note that while GCC 11 is out, there are issues with it
 
 [Make for Windows](https://github.com/mbuilov/gnumake-windows/raw/d6f3ed158d476c0a509583a6ff09351fbc85505f/gnumake-4.3.exe)
-
-> *This file needs to be copied into `C:\Program Files (x86)\GNU Arm Embedded Toolchain\10 2021.10\bin\make.exe`. Note the shortened file name*
