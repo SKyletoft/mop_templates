@@ -2,7 +2,9 @@
 
 ## VS Code users:
 
-Install the extension from the releases page, along with SimServer from gbgmv.se.
+Install the extension from the [releases](https://github.com/SKyletoft/mop_templates/releases) page, along with [SimServer from gbgmv.se](http://gbgmv.se/studies.html#machprog).
+
+You install extensions in Visual Studio Code by hitting `Ctrl + Shift + P` and typing `Install from VSIX`.
 
 **Linux users need to add their user to the `dialout` group or equivalent and reboot (really reboot, for once logging out and in again is not enough). The equivalent on Arch is `uucp`.**
 
