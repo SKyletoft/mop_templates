@@ -1,3 +1,4 @@
+import { stringify } from 'querystring';
 import * as vscode from 'vscode';
 const fs = require('fs');
 const https = require('https');
@@ -52,9 +53,38 @@ export function download() {
 			vscode.window.showInformationMessage("Download complete");
 			const zip = new unzip(TMP_FILE);
 			zip.extractAllTo(NATIVE_FOLDER, true);
-			fs.createWriteStream(DONE).close(); // Create file to mark that we don't need to redownload
 			console.log(`File extracted!`);
 			vscode.window.showInformationMessage("File extracted");
+
+			mark_executables(NATIVE_FOLDER);
+
+			fs.createWriteStream(DONE).close(); // Create file to mark that we don't need to redownload
+			vscode.window.showInformationMessage("Setup complete");
 		})
 		.pipe(fs.createWriteStream(TMP_FILE));
+}
+
+/// Returns true if the name ends with ".exe" or doesn't contain a "." at all
+function is_executable(file: string) {
+	if (file.endsWith(".exe") || file.endsWith(".elf")) { return true; }
+	const name_starts_at = Math.max(file.lastIndexOf("/"), file.lastIndexOf("\\"));
+	const name = file.substring(name_starts_at);
+	return name.indexOf(".") === -1;
+}
+
+/// Recursively finds executables and sets the executable bit (relevant for Unix systems)
+function mark_executables(path: string) {
+	const files = fs.readdirSync(path);
+
+	for (const file of files) {
+		const full_file = `${path}/${file}`;
+		if (fs.lstatSync(full_file).isDirectory()) {
+			mark_executables(full_file);
+		} else if (is_executable(full_file)) {
+			console.log(`modding ${file}`);
+			fs.chmodSync(full_file, 0o777);
+		} else {
+			console.log(`leaving ${file} alone`);
+		}
+	}
 }
