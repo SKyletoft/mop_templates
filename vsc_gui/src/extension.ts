@@ -33,7 +33,8 @@ export function activate(context: vscode.ExtensionContext) {
 	const path_separator = process.platform === "win32" ? "\\" : "/";
 	context.environmentVariableCollection.append("PATH", `${var_separator}${extension_root}${path_separator}native_dependencies${path_separator}bin`);
 
-	download();
+	context.subscriptions.push(vscode.commands.registerCommand('md407.download-gcc', download));
+	vscode.commands.executeCommand("md407.download-gcc");
 
 	const build_task = new CustomBuildTaskProvider(workspace_root);
 	vscode.tasks.registerTaskProvider(CustomBuildTaskProvider.CustomBuildScriptType, build_task);

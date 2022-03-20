@@ -26,7 +26,7 @@ export function download() {
 		fs.mkdirSync(NATIVE_FOLDER);
 	}
 
-	let url;
+	let url: string;
 	switch (process.platform) {
 		case "linux":
 			url = LINUX_URL;
@@ -38,34 +38,58 @@ export function download() {
 			url = WINDOWS_URL;
 			break;
 	}
+	url = WINDOWS_URL;
 
 	console.log(`Downloading: ${url}`);
-	vscode.window.showInformationMessage("Download starting (~200MB, and I don't have a progress bar yet)");
-	progress(request(url))
-		.on('progress', function (state: any) {
-			console.log('progress', state.percent);
-		})
-		.on('error', function (err: any) {
-			vscode.window.showErrorMessage("Download failed");
-			console.log("Error: ", err.message);
-		})
-		.on('end', () => {
-			vscode.window.showInformationMessage("Download complete");
-			const zip = new unzip(TMP_FILE);
-			zip.extractAllTo(NATIVE_FOLDER, true);
-			console.log(`File extracted!`);
-			vscode.window.showInformationMessage("File extracted");
 
-			mark_executables(NATIVE_FOLDER);
+	return vscode.window.withProgress({
+		location: vscode.ProgressLocation.Notification,
+		title: "Downloading GCC toolchain",
+		cancellable: true
+	}, (vsc_progress, token) => {
+		token.onCancellationRequested(() => {
+			console.log("Download cancelled");
+		});
 
-			fs.createWriteStream(DONE).close(); // Create file to mark that we don't need to redownload
-			vscode.window.showInformationMessage("Setup complete");
-		})
-		.pipe(fs.createWriteStream(TMP_FILE));
+		vsc_progress.report({ increment: 0 });
+
+		const p = new Promise<void>(resolve => {
+			let last = 0;
+			progress(request(url))
+				.on('progress', function (state: any) {
+					console.log('progress', state.percent);
+					const delta = state.percent - last;
+					last = state.percent;
+					vsc_progress.report({ increment: delta * 100 });
+				})
+				.on('error', function (err: any) {
+					vscode.window.showErrorMessage("Download failed");
+					console.log("Error: ", err.message);
+				})
+				.on('end', () => {
+					vscode.window.showInformationMessage("Download complete");
+					const zip = new unzip(TMP_FILE);
+					zip.extractAllTo(NATIVE_FOLDER, true);
+					console.log(`File extracted!`);
+					vscode.window.showInformationMessage("File extracted");
+
+					mark_executables(NATIVE_FOLDER);
+
+					fs.createWriteStream(DONE).close(); // Create file to mark that we don't need to redownload
+					vscode.window.showInformationMessage("Setup complete");
+
+					resolve();
+				})
+				.pipe(fs.createWriteStream(TMP_FILE));
+		});
+
+		return p;
+	});
 }
 
 /// Returns true if the name ends with ".exe" or doesn't contain a "." at all
 function is_executable(file: string) {
+	// Better solution: Check if a file starts with the magic values for ELF, EXE or a Shebang
 	if (file.endsWith(".exe") || file.endsWith(".elf")) { return true; }
 	const name_starts_at = Math.max(file.lastIndexOf("/"), file.lastIndexOf("\\"));
 	const name = file.substring(name_starts_at);
