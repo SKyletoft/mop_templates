@@ -6,7 +6,7 @@
 	"repository": {
 		"url": "https://github.com/SKyletoft/mop_template"
 	},
-	"version": "0.0.1",
+	"version": "1.0.0-rc2",
 	"engines": {
 		"vscode": "^1.63.0"
 	},
