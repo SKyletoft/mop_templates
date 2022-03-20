@@ -32,6 +32,7 @@ export function instanciate_template(template_name: string, new_name: string) {
 			gdbpath: "gdb-multiarch"
 		},
 		windows: {
+			// This is horrid, but as the debugger is a different extension, it cannot read changes we make to $PATH
 			gdbpath: `${extension_root}/native_dependencies/bin/arm-none-eabi-gdb.exe`
 		},
 		osx: {
