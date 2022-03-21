@@ -41,6 +41,8 @@ export function download() {
 
 	console.log(`Downloading: ${url}`);
 
+	vscode.window.showInformationMessage("Download started, progress bar may not show up");
+
 	return vscode.window.withProgress({
 		location: vscode.ProgressLocation.Notification,
 		title: "Downloading GCC toolchain",
