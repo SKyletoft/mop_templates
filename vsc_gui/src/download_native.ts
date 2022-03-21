@@ -38,7 +38,6 @@ export function download() {
 			url = WINDOWS_URL;
 			break;
 	}
-	url = WINDOWS_URL;
 
 	console.log(`Downloading: ${url}`);
 
