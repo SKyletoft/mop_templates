@@ -29,3 +29,9 @@ You can also run the default program on Hardware by going to the MD407 Config ta
 ## External Links
 
 [SimServer and Eterm8](http://gbgmv.se/studies.html#machprog)
+
+## Changelog
+
+* 1.0.1 Fixed readme
+
+* 1.0.0 Initial release
