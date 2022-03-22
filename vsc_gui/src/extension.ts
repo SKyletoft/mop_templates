@@ -8,7 +8,7 @@ import { Actions } from './actions';
 import { MD407WinRsWrapper } from './native_com';
 import { instanciate_template } from './template_creation';
 import { CustomBuildTaskProvider } from './build_task';
-import { download } from './download_native';
+import { download, uninstall } from './download_native';
 
 let port = "";
 let baud_rate = "115'200";
@@ -33,6 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
 	const path_separator = process.platform === "win32" ? "\\" : "/";
 	context.environmentVariableCollection.append("PATH", `${var_separator}${extension_root}${path_separator}native_dependencies${path_separator}bin`);
 
+	context.subscriptions.push(vscode.commands.registerCommand('md407.clear-downloads', uninstall));
 	context.subscriptions.push(vscode.commands.registerCommand('md407.download-gcc', download));
 	vscode.commands.executeCommand("md407.download-gcc");
 

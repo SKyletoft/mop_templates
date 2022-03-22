@@ -15,6 +15,11 @@ const TMP_FILE: string = ROOT + "/native_dependencies/files.zip";
 const NATIVE_FOLDER: string = ROOT + "/native_dependencies";
 const DONE: string = ROOT + "/native_dependencies/done";
 
+export function uninstall() {
+	fs.rmdirSync(NATIVE_FOLDER, { recursive: true });
+	vscode.window.showInformationMessage("Uninstalled");
+}
+
 export function download() {
 	const downloaded_before = fs.existsSync(DONE);
 	if (downloaded_before) {
