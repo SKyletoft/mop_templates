@@ -5,7 +5,6 @@ import { PortConfig } from './port_config';
 import { BaudRateConfig } from './baud_rate_config';
 import { FileList } from './file_list';
 import { Actions } from './actions';
-import { MD407WinRsWrapper } from './native_com';
 import { instanciate_template } from './template_creation';
 import { CustomBuildTaskProvider } from './build_task';
 import { download } from './download_native';
