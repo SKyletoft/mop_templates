@@ -26,3 +26,4 @@ build:
 	arm-none-eabi-objdump -D -S debug/MOP > debug/MOP.dass
 	-rm *.o
 	-del *.o
+	echo Success
