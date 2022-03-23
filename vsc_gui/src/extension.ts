@@ -9,6 +9,7 @@ import { instanciate_template } from './template_creation';
 import { CustomBuildTaskProvider } from './build_task';
 import { download, uninstall } from './download_native';
 import { EXTENSION_ROOT, MD407_WIN_RS, WORKSPACE_ROOT } from './constants';
+import { fix_gdb_paths } from './update-fix';
 
 let port = "";
 let baud_rate = "115'200";
@@ -23,6 +24,10 @@ function get_baud_rate() {
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+
+	// Fix for me being dumb and hardcoding paths with version numbers. (To be fair, it's because other extensions can't see when I set $PATH)
+	// Also fixes sharing between computers.
+	fix_gdb_paths();
 
 	// Add our tools to $PATH instead of hardcoding magic full paths everywhere
 	const var_separator = process.platform === "win32" ? ";" : ":";
