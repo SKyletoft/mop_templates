@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { MD407WinRsWrapper } from './native_com';
 
 export const FOLDER_NAME_REGEX: RegExp = /skyletoft\.md407-code-[0-9]+\.[0-9]+\.[0-9]+/;
+export const REGEX_LENGTH: number = FOLDER_NAME_REGEX.toString().length;
 export const EXTENSION_ROOT: string = vscode.extensions.getExtension("skyletoft.md407-code")?.extensionPath || "";
 export const WORKSPACE_ROOT: string = (() => {
 	let root = vscode.workspace.workspaceFolders?.map((folder) => folder.uri.path)[0] ?? "~";
