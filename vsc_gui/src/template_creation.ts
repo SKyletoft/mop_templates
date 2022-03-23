@@ -8,6 +8,7 @@ const comment_json = require('comment-json');
 
 export function instanciate_template(template_name: string, new_name: string) {
 	console.log(new_name);
+	new_name = new_name.replaceAll(" ", "_");
 
 	const vscode_path = `${WORKSPACE_ROOT}/.vscode`;
 	if (!fs.existsSync(vscode_path)) {
