@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import { MD407WinRsWrapper } from './native_com';
 
 type TreeItem = vscode.TreeItem;
-const { execSync, execFileSync } = require('child_process');
 
 export class PortConfig implements vscode.TreeDataProvider<TreeItem> {
 	constructor() { }

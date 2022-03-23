@@ -5,17 +5,14 @@ import { PortConfig } from './port_config';
 import { BaudRateConfig } from './baud_rate_config';
 import { FileList } from './file_list';
 import { Actions } from './actions';
-import { MD407WinRsWrapper } from './native_com';
 import { instanciate_template } from './template_creation';
 import { CustomBuildTaskProvider } from './build_task';
 import { download, uninstall } from './download_native';
+import { EXTENSION_ROOT, MD407_WIN_RS, WORKSPACE_ROOT } from './constants';
 
 let port = "";
 let baud_rate = "115'200";
 let project = "";
-const md407_win_rs = new MD407WinRsWrapper();
-const workspace_root = (vscode.workspace.workspaceFolders && (vscode.workspace.workspaceFolders.length > 0))
-	? vscode.workspace.workspaceFolders[0].uri.fsPath : "~";
 
 function get_baud_rate() {
 	let filtered = baud_rate.replace("'", "");
@@ -28,16 +25,18 @@ function get_baud_rate() {
 export function activate(context: vscode.ExtensionContext) {
 
 	// Add our tools to $PATH instead of hardcoding magic full paths everywhere
-	const extension_root = context.extension.extensionPath;
 	const var_separator = process.platform === "win32" ? ";" : ":";
 	const path_separator = process.platform === "win32" ? "\\" : "/";
-	context.environmentVariableCollection.append("PATH", `${var_separator}${extension_root}${path_separator}native_dependencies${path_separator}bin`);
+	context.environmentVariableCollection.append(
+		"PATH",
+		`${var_separator}${EXTENSION_ROOT}${path_separator}native_dependencies${path_separator}bin`
+	);
 
 	context.subscriptions.push(vscode.commands.registerCommand('md407.clear-downloads', uninstall));
 	context.subscriptions.push(vscode.commands.registerCommand('md407.download-gcc', download));
 	vscode.commands.executeCommand("md407.download-gcc");
 
-	const build_task = new CustomBuildTaskProvider(workspace_root);
+	const build_task = new CustomBuildTaskProvider(WORKSPACE_ROOT);
 	vscode.tasks.registerTaskProvider(CustomBuildTaskProvider.CustomBuildScriptType, build_task);
 
 	vscode.commands.registerCommand('md407.run', async (entry) => {
@@ -60,7 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
 					vscode.window.showErrorMessage("You have to set a project");
 					break;
 				}
-				md407_win_rs.load(port, get_baud_rate(), project);
+				MD407_WIN_RS.load(port, get_baud_rate(), project);
 			} break;
 			case "Go": {
 				if (port === "") {
@@ -71,7 +70,7 @@ export function activate(context: vscode.ExtensionContext) {
 					vscode.window.showErrorMessage("You have to set a project");
 					break;
 				}
-				md407_win_rs.go(port, get_baud_rate());
+				MD407_WIN_RS.go(port, get_baud_rate());
 			} break;
 			case "Interactive": {
 				if (port === "") {
@@ -82,9 +81,9 @@ export function activate(context: vscode.ExtensionContext) {
 				const term = vscode.window.terminals.find((t) => t.name === NAME) || vscode.window.createTerminal(NAME);
 				term.show();
 				if (process.platform === "win32") {
-					term.sendText(["cls\n& '" + md407_win_rs.path + "'", "interactive", "--port", port, "--baud-rate", get_baud_rate()].join(" "), true);
+					term.sendText(["cls\n& '" + MD407_WIN_RS.path + "'", "interactive", "--port", port, "--baud-rate", get_baud_rate()].join(" "), true);
 				} else {
-					term.sendText([md407_win_rs.path, "interactive", "--port", port, "--baud-rate", get_baud_rate()].join(" "), true);
+					term.sendText([MD407_WIN_RS.path, "interactive", "--port", port, "--baud-rate", get_baud_rate()].join(" "), true);
 				}
 			} break;
 		}

@@ -1,28 +1,23 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import {WORKSPACE_ROOT, EXTENSION_ROOT} from './constants';
 const fs = require('fs');
 const comment_json = require('comment-json');
 
-const extension_root: string = vscode.extensions.getExtension("skyletoft.md407-code")?.extensionPath || "";
-let workspace_root: string = vscode.workspace.workspaceFolders?.map((folder) => folder.uri.path)[0] || "~";
-
-// WHY, NodeJS, WHY!?
-if (process.platform === "win32" && workspace_root.startsWith("/")) {
-	workspace_root = workspace_root.substring(1);
-}
 
 export function instanciate_template(template_name: string, new_name: string) {
 	console.log(new_name);
+	new_name = new_name.replaceAll(" ", "_");
 
-	const vscode_path = `${workspace_root}/.vscode`;
+	const vscode_path = `${WORKSPACE_ROOT}/.vscode`;
 	if (!fs.existsSync(vscode_path)) {
 		fs.mkdirSync(vscode_path);
 	}
 
-	const launch_path = `${workspace_root}/.vscode/launch.json`;
+	const launch_path = `${WORKSPACE_ROOT}/.vscode/launch.json`;
 	if (!fs.existsSync(launch_path)) {
-		fs.copyFileSync(`${extension_root}/templates/.vscode/launch.json`, launch_path);
+		fs.copyFileSync(`${EXTENSION_ROOT}/templates/.vscode/launch.json`, launch_path);
 	}
 	let file = fs.readFileSync(launch_path, "utf-8");
 	let launch = comment_json.parse(file);
@@ -33,10 +28,10 @@ export function instanciate_template(template_name: string, new_name: string) {
 		},
 		windows: {
 			// This is horrid, but as the debugger is a different extension, it cannot read changes we make to $PATH
-			gdbpath: `${extension_root}/native_dependencies/bin/arm-none-eabi-gdb.exe`
+			gdbpath: `${EXTENSION_ROOT}/native_dependencies/bin/arm-none-eabi-gdb.exe`
 		},
 		osx: {
-			gdbpath: `${extension_root}/native_dependencies/bin/arm-none-eabi-gdb`
+			gdbpath: `${EXTENSION_ROOT}/native_dependencies/bin/arm-none-eabi-gdb`
 		},
 		name: `${new_name} - SimServer`,
 		type: "gdb",
@@ -59,9 +54,9 @@ export function instanciate_template(template_name: string, new_name: string) {
 	file = comment_json.stringify(launch, null, '\t');
 	fs.writeFileSync(launch_path, file);
 
-	const tasks_path = `${workspace_root}/.vscode/tasks.json`;
+	const tasks_path = `${WORKSPACE_ROOT}/.vscode/tasks.json`;
 	if (!fs.existsSync(tasks_path)) {
-		fs.copyFileSync(`${extension_root}/templates/.vscode/tasks.json`, tasks_path);
+		fs.copyFileSync(`${EXTENSION_ROOT}/templates/.vscode/tasks.json`, tasks_path);
 	}
 	file = fs.readFileSync(tasks_path, "utf-8");
 	let tasks = comment_json.parse(file);
@@ -79,8 +74,8 @@ export function instanciate_template(template_name: string, new_name: string) {
 	file = comment_json.stringify(tasks, null, '\t');
 	fs.writeFileSync(tasks_path, file);
 
-	const src = extension_root + "/templates/" + template_name;
-	const dest = `${workspace_root}/${new_name}`;
+	const src = EXTENSION_ROOT + "/templates/" + template_name;
+	const dest = `${WORKSPACE_ROOT}/${new_name}`;
 	fs.mkdirSync(dest);
 	copy_folder(src, dest);
 }

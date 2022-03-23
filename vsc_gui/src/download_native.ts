@@ -43,9 +43,10 @@ export function download() {
 			url = WINDOWS_URL;
 			break;
 	}
-	url = WINDOWS_URL;
 
 	console.log(`Downloading: ${url}`);
+
+	vscode.window.showInformationMessage("Download started, progress bar may not show up");
 
 	return vscode.window.withProgress({
 		location: vscode.ProgressLocation.Notification,

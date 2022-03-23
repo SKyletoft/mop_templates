@@ -1,11 +1,37 @@
-# md407-code README
+# MD407 Templates for use outside of CodeLite
 
-This is an extension to integrate the Chalmers MD407 development board into Visual Studio Code
+## Usage
 
-## Requirements
+**Linux users need to add their user to the `dialout` group or equivalent and reboot (really reboot, for once logging out and in again is not enough). The equivalent on Arch is `uucp`.**
 
-`make` and the gcc cross compilation toolchain (`gcc-arm-none-eabi` and so on) need to be on `$PATH`. For SimServer debugging, SimServer needs to be installed from gbgmv.se
+Open VSC in an empty folder and hit `Ctrl + Shift + P` and type `Create new project from Basic template`. Then enter your project name.
 
-## Known Issues
+You can now run the default program in SimServer by opening SimServer, then going to the debugging tab, selecting your project and hitting the green arrow.
 
-No Mac support
+You can also run the default program on Hardware by going to the MD407 Config tab (added by the extension), selecting the port under the ports section and then hitting `Interactive`, `Compile` and `Load` in order and then typing `go` in the now opened terminal. Remember to reset the MD407 between runs. MacOS requires resets between load and `go`.
+
+## Required packages for Linux users (bundled for Windows/Mac)
+
+### Debian based systems
+
+* `gdb-multiarch`
+* `make`
+* `gcc-arm-none-eabi`
+* `libnewlib-arm-none-eabi`
+* `libnewlib-nano-arm-none-eabi`
+
+### Arch based systems
+
+* `arm-none-eabi-gdb` (needs to be aliased to `gdb-multiarch` or have `.vscode/launch.json` changed)
+* `arm-none-eabi-gcc`
+* `arm-none-eabi-newlib`
+
+## External Links
+
+[SimServer and Eterm8](http://gbgmv.se/studies.html#machprog)
+
+## Changelog
+
+* 1.0.1 Fixed readme
+
+* 1.0.0 Initial release
