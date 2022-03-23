@@ -1,7 +1,6 @@
 USAGE:
 
 This template requires SimServer to be installed from gbgmv.se.
-The Clangd (and not Microsoft's C/C++) and Clang-format extensions are recommended but not required.
 
 Debian based Linux users require the following packages from the repo:
 
@@ -24,5 +23,3 @@ Hardware instructions
 2. Set port. Hopefully there'll only be one to choose from, but if there are several you will just have to try them all
 3. Press `Do` next to `Compile`, `Load` and `Interactive` in that order. Wait for `Load` to complete before starting `Interactive`
 4. Type `go` in the terminal
-
-To add additional source files, just add them to the `FILES` variable in `makefile`. Make sure all lines but the last one end with `\`.
