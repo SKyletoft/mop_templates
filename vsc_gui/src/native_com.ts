@@ -1,8 +1,9 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { EXTENSION_ROOT } from './constants';
 
-const { execSync, execFileSync } = require('child_process');
+const child_process = require('child_process');
 const fs = require('fs');
 
 export class MD407WinRsWrapper {
@@ -13,7 +14,7 @@ export class MD407WinRsWrapper {
 	}
 
 	query(): string {
-		return execFileSync(this.path, ['query']).toString('utf8');
+		return child_process.execFileSync(this.path, ['query']).toString('utf8');
 	}
 
 	load(port: string, baud_rate: number, project: string) {
@@ -30,7 +31,7 @@ export class MD407WinRsWrapper {
 			return;
 		}
 
-		const out = execFileSync(
+		const out = child_process.execFileSync(
 			this.path,
 			['load', '--filename', out_path.replace(" ", "\ "), '--port', port, '--baud-rate', baud_rate.toString()],
 			{ timeout: 60000 } // One minute
@@ -40,19 +41,18 @@ export class MD407WinRsWrapper {
 	}
 
 	go(port: string, baud_rate: number): string {
-		return execFileSync(this.path, ['go', '--port', port, '--baud-rate', baud_rate.toString()]).toString('utf8');
+		return child_process.execFileSync(this.path, ['go', '--port', port, '--baud-rate', baud_rate.toString()]).toString('utf8');
 	}
 }
 
 function get_path(): string {
-	const root: string = vscode.extensions.getExtension("skyletoft.md407-code")?.extensionPath || "";
 	const linux = "/native_dependencies/bin/hardware-com-linux";
 	const windows = "/native_dependencies/bin/hardware-com-windows.exe";
 	const darwin = "/native_dependencies/bin/hardware-com-darwin";
 	switch (process.platform) {
-		case "linux": return root + linux;
-		case "win32": return root + windows;
-		case "darwin": return root + darwin;
+		case "linux": return EXTENSION_ROOT + linux;
+		case "win32": return EXTENSION_ROOT + windows;
+		case "darwin": return EXTENSION_ROOT + darwin;
 		default: return "";
 	}
 }
