@@ -32,6 +32,19 @@ You can also run the default program on Hardware by going to the MD407 Config ta
 
 ## Changelog
 
-* 1.0.1 Fixed readme
+* *1.0.2*
 
-* 1.0.0 Initial release
+	Stop project names from containing spaces
+
+	Fix for hardcoded gdb path with version number.
+	(Well, it's still there, because of technical reasons, but it's now automatically updated)
+	
+	Updated generated readmes to contain more up to date instructions
+
+* *1.0.1*
+	
+	Fixed readme
+
+* *1.0.0*
+	
+	Initial release
