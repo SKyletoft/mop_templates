@@ -1,0 +1,29 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"linux": {
+				"gdbpath": "gdb-multiarch"
+			},
+			"windows": {
+				"gdbpath": "arm-none-eabi-gdb"
+			},
+			"name": "Debug - SimServer",
+			"type": "gdb",
+			"request": "attach",
+			"executable": "./debug/MOP",
+			"target": ":1234",
+			"remote": true,
+			"cwd": "${workspaceRoot}",
+			"valuesFormatting": "parseText",
+			"autorun": [
+				"file debug/MOP",
+				"target extended-remote localhost:1234",
+				"load",
+				"monitor restart",
+				"b main",
+			],
+			"preLaunchTask": "build"
+		}
+	]
+}
