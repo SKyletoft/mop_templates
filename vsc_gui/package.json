@@ -56,6 +56,10 @@
 				"title": "MD407: Create new project from the Basic template"
 			},
 			{
+				"command": "md407.new_basic_2",
+				"title": "New"
+			},
+			{
 				"command": "md407.new_crt",
 				"title": "MD407: Create new project from the CRT template"
 			},
@@ -106,6 +110,11 @@
 				},
 				{
 					"command": "md407.reload_projects",
+					"when": "view == md407-projects",
+					"group": "navigation"
+				},
+				{
+					"command": "md407.new_basic_2",
 					"when": "view == md407-projects",
 					"group": "navigation"
 				}

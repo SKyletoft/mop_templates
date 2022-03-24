@@ -120,6 +120,17 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
+	// Copy of new basic with different name for the button
+	vscode.commands.registerCommand('md407.new_basic_2', async () => {
+		let new_name = await vscode.window.showInputBox({ title: "Enter project name:" });
+		if (new_name === "") {
+			new_name = "1-1";
+		}
+		if (new_name !== undefined) {
+			instanciate_template('basic', new_name);
+		}
+	});
+
 	vscode.commands.registerCommand('md407.new_crt', async () => {
 		let new_name = await vscode.window.showInputBox({ title: "Enter project name:" });
 		if (new_name === "") {
