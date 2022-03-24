@@ -34,6 +34,8 @@ You can also run the default program on Hardware by going to the MD407 Config ta
 
 * *1.0.2*
 
+	Added option to uninstall the toolchain (will still try to download on launch though)
+
 	Stop project names from containing spaces
 
 	Fix for hardcoded gdb path with version number.
