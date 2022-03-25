@@ -64,6 +64,10 @@
 				"title": "MD407: Create new project from the CRT template"
 			},
 			{
+				"command": "md407.new_asm",
+				"title": "MD407: Create new project from the assembly template"
+			},
+			{
 				"command": "md407.download-gcc",
 				"title": "MD407: Download and install the complier toolchain"
 			},

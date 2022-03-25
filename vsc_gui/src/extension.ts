@@ -141,6 +141,16 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
+	vscode.commands.registerCommand('md407.new_asm', async () => {
+		let new_name = await vscode.window.showInputBox({ title: "Enter project name:" });
+		if (new_name === "") {
+			new_name = "1-1";
+		}
+		if (new_name !== undefined) {
+			instanciate_template('asm', new_name);
+		}
+	});
+
 	const file_list = new FileList();
 	vscode.window.createTreeView(
 		'md407-projects', {
