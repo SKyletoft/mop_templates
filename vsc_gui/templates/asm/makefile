@@ -11,7 +11,7 @@ build:
 	-mkdir debug
 	-cls
 	-clear
-	arm-none-eabi-as *.s
+	arm-none-eabi-as *.s -g3
 	arm-none-eabi-ld a.out -T md407-ram.x -o debug/MOP
 	arm-none-eabi-objcopy -S -O srec  debug/MOP debug/MOP.s19
 	arm-none-eabi-objdump -D -S debug/MOP > debug/MOP.dass
