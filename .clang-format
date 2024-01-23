@@ -1,24 +1,20 @@
-﻿---
-BasedOnStyle: LLVM
-IndentWidth: 4
-AllowShortFunctionsOnASingleLine: 'None'
-AllowShortIfStatementsOnASingleLine: 'Never'
-AlignAfterOpenBracket: 'Align'
-AlignConsecutiveAssignments: 'Consecutive'
-AlignConsecutiveBitFields: 'Consecutive'
-AlignConsecutiveMacros: 'Consecutive'
-AlignOperands: 'AlignAfterOperator'
-AlignTrailingComments: true
-AllowAllArgumentsOnNextLine: false
-AllowShortBlocksOnASingleLine: 'Empty'
+AlignAfterOpenBracket: BlockIndent
+BinPackArguments: false
+AllowShortBlocksOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: Never
 AllowShortLoopsOnASingleLine: false
-BreakBeforeBraces: 'Attach'
-BreakBeforeBinaryOperators: 'NonAssignment'
-SpaceAfterCStyleCast: true
-SpaceAfterLogicalNot: false
-SpaceBeforeParens: 'ControlStatements'
-TabWidth: 4
-UseTab: 'ForIndentation'
-ColumnLimit: 78
-UseCRLF: false
-DeriveLineEnding: false
+PackConstructorInitializers: Never
+BreakBeforeBinaryOperators: NonAssignment
+BreakConstructorInitializers: BeforeComma
+BreakInheritanceList: BeforeComma
+InsertBraces: true
+PointerAlignment: Right
+IndentCaseBlocks: false
+
+BreakBeforeBraces: Custom
+BraceWrapping: { AfterControlStatement: MultiLine }
+
+IndentWidth: '4'
+ContinuationIndentWidth: '4'
+TabWidth: '4'
+UseTab: ForContinuationAndIndentation
