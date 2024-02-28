@@ -3,5 +3,6 @@
 **obj**
 **target**
 **.lock
+!**flake.lock
 **.zip
 **.vsix
