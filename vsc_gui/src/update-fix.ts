@@ -1,4 +1,3 @@
-import * as vscode from 'vscode';
 import { EXTENSION_ROOT, FOLDER_NAME_REGEX, REGEX_LENGTH, WORKSPACE_ROOT } from './constants';
 
 const fs = require('fs');

@@ -1,7 +1,5 @@
-import { stringify } from 'querystring';
 import * as vscode from 'vscode';
 const fs = require('fs');
-const https = require('https');
 const unzip = require('adm-zip');
 const request = require('request');
 const progress = require('request-progress');

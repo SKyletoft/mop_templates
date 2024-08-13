@@ -1,4 +1,3 @@
-import * as path from 'path';
 import * as vscode from 'vscode';
 
 interface CustomBuildTaskDefinition extends vscode.TaskDefinition {
