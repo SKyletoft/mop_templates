@@ -20,6 +20,10 @@
 	"contributes": {
 		"commands": [
 			{
+				"command": "md407.find_gdb",
+				"title": "Find GDB for MD407"
+			},
+			{
 				"command": "md407.reload_ports",
 				"title": "Reload ports",
 				"icon": {

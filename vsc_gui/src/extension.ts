@@ -1,6 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as path from 'path';
 import { PortConfig } from './port_config';
 import { BaudRateConfig } from './baud_rate_config';
 import { FileList } from './file_list';
@@ -9,7 +10,6 @@ import { instanciate_template } from './template_creation';
 import { CustomBuildTaskProvider } from './build_task';
 import { download, uninstall } from './download_native';
 import { EXTENSION_ROOT, MD407_WIN_RS, WORKSPACE_ROOT } from './constants';
-import { fix_gdb_paths } from './update-fix';
 
 let port = "";
 let baud_rate = "115'200";
@@ -21,14 +21,26 @@ function get_baud_rate() {
 	return parseInt(filtered);
 }
 
+async function find_gdb(): Promise<string> {
+	switch (process.platform) {
+		case "win32": {
+			return path.join(EXTENSION_ROOT, "native_dependencies", "bin", "arm-none-eabi-gdb.exe");
+		} break;
+		case "darwin": {
+			throw new Error("TODO: Implement find_gdb for MacOS");
+		} break;
+		case "linux": {
+			throw new Error("TODO: Implement find_gdb for Linux");
+		} break;
+		default: {
+			throw new Error("Cold not find the path to GDB");
+		} break;
+	}
+};
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-
-	// Fix for me being dumb and hardcoding paths with version numbers. (To be fair, it's because other extensions can't see when I set $PATH)
-	// Also fixes sharing between computers.
-	fix_gdb_paths();
-
 	// Add our tools to $PATH instead of hardcoding magic full paths everywhere
 	const var_separator = process.platform === "win32" ? ";" : ":";
 	const path_separator = process.platform === "win32" ? "\\" : "/";
@@ -104,6 +116,8 @@ export function activate(context: vscode.ExtensionContext) {
 		baud_rate = entry.label;
 		vscode.window.showInformationMessage("Baud rate set to " + baud_rate);
 	});
+
+	vscode.commands.registerCommand('md407.find_gdb', find_gdb);
 
 	vscode.commands.registerCommand('md407.set_project', (entry) => {
 		project = entry.label;

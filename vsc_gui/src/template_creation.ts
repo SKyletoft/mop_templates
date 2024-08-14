@@ -21,17 +21,7 @@ export function instanciate_template(template_name: string, new_name: string) {
 	let file = fs.readFileSync(launch_path, "utf-8");
 	let launch = comment_json.parse(file);
 	const new_config = {
-		linux: {
-			// Needs to be arm-none-eabi-gdb on non Debian
-			gdbpath: "gdb-multiarch"
-		},
-		windows: {
-			// This is horrid, but as the debugger is a different extension, it cannot read changes we make to $PATH
-			gdbpath: `${EXTENSION_ROOT}/native_dependencies/bin/arm-none-eabi-gdb.exe`
-		},
-		osx: {
-			gdbpath: `${EXTENSION_ROOT}/native_dependencies/bin/arm-none-eabi-gdb`
-		},
+		gdbpath: "${command:md407.find_gdb}",
 		name: `${new_name} - SimServer`,
 		type: "gdb",
 		request: "attach",
