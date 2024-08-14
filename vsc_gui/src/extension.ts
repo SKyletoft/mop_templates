@@ -43,10 +43,9 @@ async function find_gdb(): Promise<string> {
 export function activate(context: vscode.ExtensionContext) {
 	// Add our tools to $PATH instead of hardcoding magic full paths everywhere
 	const var_separator = process.platform === "win32" ? ";" : ":";
-	const path_separator = process.platform === "win32" ? "\\" : "/";
 	context.environmentVariableCollection.append(
 		"PATH",
-		`${var_separator}${EXTENSION_ROOT}${path_separator}native_dependencies${path_separator}bin`
+		`${var_separator}${path.join(EXTENSION_ROOT, "native_dependencies", "bin")}`
 	);
 
 	context.subscriptions.push(vscode.commands.registerCommand('md407.clear-downloads', uninstall));
